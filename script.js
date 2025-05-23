@@ -1,6 +1,6 @@
-// 1) import the modular SDK
-import { initializeApp }        from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
-import { getAnalytics }         from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-analytics.js';
+// 1) import Firebase modular SDK via CDN
+import { initializeApp }            from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
+import { getAnalytics }             from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-analytics.js';
 import {
   getDatabase,
   ref,
@@ -8,7 +8,7 @@ import {
   push
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js';
 
-// 2) your Firebase config (replace with yours)
+// 2) your Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBgxLUjJQKbMh9xTBbnqOUitVuJaOo72ro",
   authDomain: "farm-b8de3.firebaseapp.com",
@@ -20,12 +20,12 @@ const firebaseConfig = {
   measurementId: "G-EJJ5B4T1L6"
 };
 
-// 3) initialize
-const app   = initializeApp(firebaseConfig);
+// 3) initialize Firebase
+const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-const db    = getDatabase(app);
+const db        = getDatabase(app);
 
-// 4) map each section → its fields
+// 4) which fields live under each node
 const fieldsMap = {
   ewes:     ["id","status","medDate","expenses","sellDate","sellPrice"],
   rams:     ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
@@ -34,27 +34,29 @@ const fieldsMap = {
   olives:   ["count","plantDate","medDate","harvestDate","medCosts"]
 };
 
-// 5) on DOM ready
 window.addEventListener("DOMContentLoaded", () => {
   const sections = Object.keys(fieldsMap);
 
-  // hide all
-  sections.forEach(id => document.getElementById(id).style.display = 'none');
+  // hide all sections to start
+  sections.forEach(id => {
+    document.getElementById(id).classList.remove("active");
+  });
 
-  // nav click → show + animate
+  // nav click → toggle active class
   document.querySelectorAll("nav a").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
       const sec = link.dataset.section;
-      // clear active
+
+      // highlight link
       document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
       link.classList.add("active");
-      // hide others
+
+      // show/hide sections
       sections.forEach(id => {
         const el = document.getElementById(id);
-        el.classList.remove("fade-in");
-        el.style.display = id===sec? 'block':'none';
-        if (id===sec) el.classList.add("fade-in");
+        if (id === sec) el.classList.add("active");
+        else           el.classList.remove("active");
       });
     });
   });
@@ -66,30 +68,27 @@ window.addEventListener("DOMContentLoaded", () => {
     const form  = document.querySelector(`#${sec}-form`);
     const fields= fieldsMap[sec];
 
-    // render on update
+    // whenever data changes, re-render the table
     onValue(dbRef, snap => {
-      tbody.innerHTML = '';
+      tbody.innerHTML = "";
       snap.forEach(child => {
         const data = child.val();
-        const tr = document.createElement('tr');
-
+        const tr = document.createElement("tr");
         fields.forEach(f => {
-          const td = document.createElement('td');
-          // combine sellDate+sellPrice for rams & lambs
-          if ((sec==='rams'||sec==='lambs') && f==='sellDate') {
-            td.textContent = `${data.sellDate||''} / ${data.sellPrice||''}`;
+          const td = document.createElement("td");
+          if ((sec === "rams" || sec === "lambs") && f === "sellDate") {
+            td.textContent = `${data.sellDate || ""} / ${data.sellPrice || ""}`;
           } else {
-            td.textContent = data[f] || '';
+            td.textContent = data[f] || "";
           }
           tr.appendChild(td);
         });
-
         tbody.appendChild(tr);
       });
     });
 
-    // add new on submit
-    form.addEventListener('submit', e => {
+    // form submit → push new record
+    form.addEventListener("submit", e => {
       e.preventDefault();
       const payload = {};
       fields.forEach(f => payload[f] = form[f].value);
