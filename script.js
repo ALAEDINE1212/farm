@@ -8,7 +8,7 @@ import {
   remove
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js';
 
-// ← Replace with your Firebase config ↓
+// ← Your Firebase config ↓
 const firebaseConfig = {
   apiKey: "AIzaSyBgxLUjJQKbMh9xTBbnqOUitVuJaOo72ro",
   authDomain: "farm-b8de3.firebaseapp.com",
@@ -37,27 +37,40 @@ const fieldsMap = {
 let selectedFarm = null;
 
 window.addEventListener("DOMContentLoaded", () => {
-  const sections = Object.keys(fieldsMap);
+  const sections   = Object.keys(fieldsMap);
   const farmSelect = document.getElementById('farm-select');
   const nav        = document.querySelector('nav');
+  const switchBtn  = document.getElementById('switch-farm');
 
-  // Hide all sections initially
-  sections.forEach(id => document.getElementById(id).classList.remove("active"));
+  // hide nav + sections at start
+  nav.classList.remove('visible');
+  sections.forEach(id => document.getElementById(id).classList.remove('active'));
 
   // Farm-card click → pick farm
   document.querySelectorAll('.farm-card').forEach(card => {
     card.addEventListener('click', () => {
-      selectedFarm = card.dataset.farm;           // "sefrou" or "kamouni"
-      farmSelect.style.display = 'none';          // hide selector
-      nav.classList.add('visible');               // show navbar
-      initDataListeners();                        // start Firebase sync
-      // auto-click first section
+      selectedFarm    = card.dataset.farm;   // "sefrou" or "kamouni"
+      farmSelect.style.display = 'none';    // hide farm selector
+      nav.classList.add('visible');         // show navbar
+      initDataListeners();                  // start Firebase
+      // show first section
       document.querySelector('nav a[data-section="ewes"]').click();
     });
   });
 
+  // Switch-Farm button → go back
+  switchBtn.addEventListener('click', e => {
+    e.preventDefault();
+    selectedFarm = null;
+    farmSelect.style.display = 'flex';
+    nav.classList.remove('visible');
+    // hide all sections + clear active nav links
+    sections.forEach(id => document.getElementById(id).classList.remove('active'));
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  });
+
   // Nav links → show/hide sections
-  document.querySelectorAll("nav a").forEach(link => {
+  document.querySelectorAll("nav a[data-section]").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
       const sec = link.dataset.section;
@@ -70,7 +83,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Wire up Firebase for each section under selectedFarm
+  // Initialize Firebase listeners & forms once farm chosen
   function initDataListeners() {
     sections.forEach(sec => {
       const nodeRef = ref(db, `${selectedFarm}/${sec}`);
@@ -78,7 +91,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const form    = document.querySelector(`#${sec}-form`);
       const fields  = fieldsMap[sec];
 
-      // On data change → render rows + delete buttons
+      // render rows & delete buttons
       onValue(nodeRef, snap => {
         tbody.innerHTML = "";
         snap.forEach(childSnap => {
@@ -96,7 +109,7 @@ window.addEventListener("DOMContentLoaded", () => {
             tr.appendChild(td);
           });
 
-          // Delete button
+          // delete button
           const delTd = document.createElement("td");
           const btn   = document.createElement("button");
           btn.textContent = "حذف";
@@ -110,7 +123,7 @@ window.addEventListener("DOMContentLoaded", () => {
         });
       });
 
-      // On form submit → push new record
+      // add new record
       form.addEventListener("submit", e => {
         e.preventDefault();
         const payload = {};
