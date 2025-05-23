@@ -1,6 +1,5 @@
-// 1) import Firebase modular SDK via CDN
-import { initializeApp }            from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
-import { getAnalytics }             from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-analytics.js';
+import { initializeApp }    from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
+import { getAnalytics }     from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-analytics.js';
 import {
   getDatabase,
   ref,
@@ -8,7 +7,7 @@ import {
   push
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js';
 
-// 2) your Firebase config
+// ← Replace with your Firebase config ↓
 const firebaseConfig = {
   apiKey: "AIzaSyBgxLUjJQKbMh9xTBbnqOUitVuJaOo72ro",
   authDomain: "farm-b8de3.firebaseapp.com",
@@ -20,12 +19,11 @@ const firebaseConfig = {
   measurementId: "G-EJJ5B4T1L6"
 };
 
-// 3) initialize Firebase
 const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db        = getDatabase(app);
 
-// 4) which fields live under each node
+// fields under each node
 const fieldsMap = {
   ewes:     ["id","status","medDate","expenses","sellDate","sellPrice"],
   rams:     ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
@@ -37,38 +35,31 @@ const fieldsMap = {
 window.addEventListener("DOMContentLoaded", () => {
   const sections = Object.keys(fieldsMap);
 
-  // hide all sections to start
-  sections.forEach(id => {
-    document.getElementById(id).classList.remove("active");
-  });
+  // hide all
+  sections.forEach(id => document.getElementById(id).classList.remove("active"));
 
-  // nav click → toggle active class
+  // nav click toggles sections
   document.querySelectorAll("nav a").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
       const sec = link.dataset.section;
-
-      // highlight link
       document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
       link.classList.add("active");
-
-      // show/hide sections
       sections.forEach(id => {
         const el = document.getElementById(id);
-        if (id === sec) el.classList.add("active");
-        else           el.classList.remove("active");
+        el.classList.toggle("active", id === sec);
       });
     });
   });
 
-  // wire up Firebase for each section
+  // wire up Firebase listeners & forms
   sections.forEach(sec => {
     const dbRef = ref(db, sec);
-    const tbody = document.querySelector(`#${sec}-table tbody`);
+    const tbody = document.querySelector(`#${sec}-table`);
     const form  = document.querySelector(`#${sec}-form`);
     const fields= fieldsMap[sec];
 
-    // whenever data changes, re-render the table
+    // render on update
     onValue(dbRef, snap => {
       tbody.innerHTML = "";
       snap.forEach(child => {
@@ -76,8 +67,9 @@ window.addEventListener("DOMContentLoaded", () => {
         const tr = document.createElement("tr");
         fields.forEach(f => {
           const td = document.createElement("td");
+          // combine date/price for rams & lambs
           if ((sec === "rams" || sec === "lambs") && f === "sellDate") {
-            td.textContent = `${data.sellDate || ""} / ${data.sellPrice || ""}`;
+            td.textContent = `${data.sellDate||""} / ${data.sellPrice||""}`;
           } else {
             td.textContent = data[f] || "";
           }
@@ -87,7 +79,7 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // form submit → push new record
+    // add new record
     form.addEventListener("submit", e => {
       e.preventDefault();
       const payload = {};
