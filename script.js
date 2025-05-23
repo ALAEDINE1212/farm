@@ -8,7 +8,7 @@ import {
   remove
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js';
 
-// ← Your Firebase config ↓
+// → Replace with your Firebase config ↓
 const firebaseConfig = {
   apiKey: "AIzaSyBgxLUjJQKbMh9xTBbnqOUitVuJaOo72ro",
   authDomain: "farm-b8de3.firebaseapp.com",
@@ -34,40 +34,49 @@ const fieldsMap = {
   olives:   ["count","plantDate","medDate","harvestDate","medCosts"]
 };
 
+// Arabic header labels for cards
+const headerLabelsMap = {
+  ewes:     ["رقم","الوضعيّة","تاريخ دواء","مصاريف","تاريخ بيع","ثمن بيع"],
+  rams:     ["رقم","تاريخ شراء","ثمن شراء","الوضعيّة","مصاريف","تاريخ / ثمن بيع"],
+  lambs:    ["رقم","تاريخ شراء","ثمن شراء","تاريخ دواء","مصاريف","تاريخ / ثمن بيع"],
+  chickens: ["نوع","جنس","عدد","تاريخ شراء","ثمن شراء","تاريخ دواء","مصاريف","تاريخ بيع","ثمن بيع"],
+  olives:   ["عدد","تاريخ زرع","تاريخ دواء","تاريخ قطاف","مصاريف دواء"]
+};
+
 let selectedFarm = null;
 
 window.addEventListener("DOMContentLoaded", () => {
   const sections   = Object.keys(fieldsMap);
-  const farmSelect = document.getElementById('farm-select');
-  const nav        = document.querySelector('nav');
-  const switchBtn  = document.getElementById('switch-farm');
+  const farmSelect = document.getElementById("farm-select");
+  const nav        = document.querySelector("nav");
+  const switchBtn  = document.getElementById("switch-farm");
 
-  // hide nav + sections at start
-  nav.classList.remove('visible');
-  sections.forEach(id => document.getElementById(id).classList.remove('active'));
+  // hide nav + sections on load
+  nav.classList.remove("visible");
+  sections.forEach(id => document.getElementById(id).classList.remove("active"));
 
-  // Farm-card click → pick farm
-  document.querySelectorAll('.farm-card').forEach(card => {
-    card.addEventListener('click', () => {
-      selectedFarm    = card.dataset.farm;   // "sefrou" or "kamouni"
-      farmSelect.style.display = 'none';
-      nav.classList.add('visible');
+  // pick a farm
+  document.querySelectorAll(".farm-card").forEach(card => {
+    card.addEventListener("click", () => {
+      selectedFarm = card.dataset.farm;    // “sefrou” or “kamouni”
+      farmSelect.style.display = "none";
+      nav.classList.add("visible");
       initDataListeners();
       document.querySelector('nav a[data-section="ewes"]').click();
     });
   });
 
-  // Switch-Farm button → go back
-  switchBtn.addEventListener('click', e => {
+  // switch farm
+  switchBtn.addEventListener("click", e => {
     e.preventDefault();
     selectedFarm = null;
-    farmSelect.style.display = 'flex';
-    nav.classList.remove('visible');
-    sections.forEach(id => document.getElementById(id).classList.remove('active'));
-    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    farmSelect.style.display = "flex";
+    nav.classList.remove("visible");
+    sections.forEach(id => document.getElementById(id).classList.remove("active"));
+    document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
   });
 
-  // Nav links → show/hide sections
+  // show/hide sections
   document.querySelectorAll("nav a[data-section]").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
@@ -75,13 +84,12 @@ window.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
       link.classList.add("active");
       sections.forEach(id => {
-        document.getElementById(id)
-                .classList.toggle("active", id === sec);
+        document.getElementById(id).classList.toggle("active", id === sec);
       });
     });
   });
 
-  // Initialize Firebase listeners & forms once farm chosen
+  // wire up Firebase per section
   function initDataListeners() {
     sections.forEach(sec => {
       const nodeRef = ref(db, `${selectedFarm}/${sec}`);
@@ -89,17 +97,16 @@ window.addEventListener("DOMContentLoaded", () => {
       const form    = document.querySelector(`#${sec}-form`);
       const fields  = fieldsMap[sec];
 
-      // render rows & delete buttons
       onValue(nodeRef, snap => {
         tbody.innerHTML = "";
-        snap.forEach(childSnap => {
-          const data = childSnap.val();
-          const key  = childSnap.key;
+        snap.forEach(child => {
+          const data = child.val(), key = child.key;
           const tr   = document.createElement("tr");
 
-          fields.forEach(f => {
+          fields.forEach((f, i) => {
             const td = document.createElement("td");
-            if ((sec === "rams" || sec === "lambs") && f === "sellDate") {
+            td.setAttribute("data-label", headerLabelsMap[sec][i] || "");
+            if ((sec === "rams"||sec==="lambs") && f==="sellDate") {
               td.textContent = `${data.sellDate||""} / ${data.sellPrice||""}`;
             } else {
               td.textContent = data[f] || "";
@@ -107,9 +114,10 @@ window.addEventListener("DOMContentLoaded", () => {
             tr.appendChild(td);
           });
 
-          // delete button
+          // delete button cell
           const delTd = document.createElement("td");
-          const btn   = document.createElement("button");
+          delTd.setAttribute("data-label", "");
+          const btn = document.createElement("button");
           btn.textContent = "حذف";
           btn.addEventListener("click", () => {
             remove(ref(db, `${selectedFarm}/${sec}/${key}`));
@@ -121,7 +129,7 @@ window.addEventListener("DOMContentLoaded", () => {
         });
       });
 
-      // add new record
+      // add new
       form.addEventListener("submit", e => {
         e.preventDefault();
         const payload = {};

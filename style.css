@@ -19,7 +19,7 @@ body {
   direction: rtl;
 }
 
-/* --- Farm Select Screen --- */
+/* Farm-select screen */
 .farm-select {
   display: flex;
   justify-content: center;
@@ -44,7 +44,7 @@ body {
   transform: scale(1.05);
 }
 
-/* --- Navigation --- */
+/* Navigation */
 nav {
   display: none;
   position: sticky;
@@ -73,7 +73,7 @@ nav a.active {
   transform: scale(1.05);
 }
 
-/* --- Sections --- */
+/* Sections */
 .section {
   max-width: 1000px;
   margin: 2rem auto;
@@ -87,13 +87,13 @@ nav a.active {
   opacity: 1;
 }
 
-/* --- Table wrapper for horizontal scroll --- */
+/* Table wrapper for scrolling */
 .table-wrap {
   overflow-x: auto;
   margin-bottom: 1rem;
 }
 
-/* --- Tables & Forms --- */
+/* Tables & forms */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -117,8 +117,6 @@ thead th {
   color: #fff;
   border: none;
 }
-
-/* inputs/buttons fill full cell */
 table input,
 table button {
   width: 100%;
@@ -148,28 +146,44 @@ table button:hover {
   transform: scale(1.02);
 }
 
-/* --- Responsive tweaks --- */
+/* Desktop → mobile tweaks */
 @media (max-width: 768px) {
-  .farm-card {
-    padding: 1.2rem 1.8rem;
-    font-size: 1.1rem;
+  .farm-card { padding: 1.2rem 1.8rem; font-size: 1.1rem; }
+  nav a      { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+  .section   { margin: 1rem; }
+  caption    { font-size: 1.2em; }
+  th, td     { padding: 0.4rem; }
+  table input, table button { font-size: 0.9em; }
+}
+
+/* ----- TABLE → CARD layout on small phones ----- */
+@media (max-width: 600px) {
+  .table-wrap { overflow-x: visible; }
+  table, thead, tbody, th, td, tr { display: block; }
+  thead tr { display: none; }
+  tr {
+    margin: 0 0 1rem;
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   }
-  nav a {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
+  td {
+    position: relative;
+    padding: 0.75rem 0.75rem 0.75rem 45%;
+    text-align: right;
+    border: none;
   }
-  .section {
-    margin: 1rem;
+  td:before {
+    content: attr(data-label);
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    width: calc(45% - 1.5rem);
+    font-weight: 600;
+    white-space: nowrap;
   }
-  caption {
-    font-size: 1.2em;
-  }
-  th, td {
-    padding: 0.4rem;
-  }
-  table input,
-  table button {
-    font-size: 0.9em;
-  }
+  tfoot tr { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+  tfoot td { padding-left: 0.75rem; }
 }
 
