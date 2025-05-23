@@ -50,10 +50,9 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('.farm-card').forEach(card => {
     card.addEventListener('click', () => {
       selectedFarm    = card.dataset.farm;   // "sefrou" or "kamouni"
-      farmSelect.style.display = 'none';    // hide farm selector
-      nav.classList.add('visible');         // show navbar
-      initDataListeners();                  // start Firebase
-      // show first section
+      farmSelect.style.display = 'none';
+      nav.classList.add('visible');
+      initDataListeners();
       document.querySelector('nav a[data-section="ewes"]').click();
     });
   });
@@ -64,7 +63,6 @@ window.addEventListener("DOMContentLoaded", () => {
     selectedFarm = null;
     farmSelect.style.display = 'flex';
     nav.classList.remove('visible');
-    // hide all sections + clear active nav links
     sections.forEach(id => document.getElementById(id).classList.remove('active'));
     document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
   });
@@ -77,8 +75,8 @@ window.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
       link.classList.add("active");
       sections.forEach(id => {
-        const el = document.getElementById(id);
-        el.classList.toggle("active", id === sec);
+        document.getElementById(id)
+                .classList.toggle("active", id === sec);
       });
     });
   });

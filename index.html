@@ -26,158 +26,168 @@
     <a href="#" data-section="lambs">أولاد أغنام</a>
     <a href="#" data-section="chickens">الدجاج</a>
     <a href="#" data-section="olives">أشجار الزيتون</a>
-    <!-- Switch-Farm button -->
     <a href="#" id="switch-farm">تغيير المزرعة</a>
   </nav>
 
   <!-- 1) Ewes -->
   <section id="ewes" class="section">
     <form id="ewes-form">
-      <table>
-        <caption>قائمة أغنام إناث</caption>
-        <thead>
-          <tr>
-            <th>رقم</th><th>الوضعيّة</th><th>تاريخ دواء</th>
-            <th>مصاريف</th><th>تاريخ بيع</th><th>ثمن بيع</th><th></th>
-          </tr>
-        </thead>
-        <tbody id="ewes-table"></tbody>
-        <tfoot>
-          <tr>
-            <td><input name="id"        placeholder="رقم" required /></td>
-            <td><input name="status"    placeholder="الوضعيّة" /></td>
-            <td><input name="medDate"   type="date" /></td>
-            <td><input name="expenses"  placeholder="مصاريف" /></td>
-            <td><input name="sellDate"  type="date" /></td>
-            <td><input name="sellPrice" placeholder="ثمن بيع" /></td>
-            <td><button type="submit">أضف أنثى</button></td>
-          </tr>
-        </tfoot>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <caption>قائمة أغنام إناث</caption>
+          <thead>
+            <tr>
+              <th>رقم</th><th>الوضعيّة</th><th>تاريخ دواء</th>
+              <th>مصاريف</th><th>تاريخ بيع</th><th>ثمن بيع</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="ewes-table"></tbody>
+          <tfoot>
+            <tr>
+              <td><input name="id"        placeholder="رقم" required /></td>
+              <td><input name="status"    placeholder="الوضعيّة" /></td>
+              <td><input name="medDate"   type="date" /></td>
+              <td><input name="expenses"  placeholder="مصاريف" /></td>
+              <td><input name="sellDate"  type="date" /></td>
+              <td><input name="sellPrice" placeholder="ثمن بيع" /></td>
+              <td><button type="submit">أضف أنثى</button></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </form>
   </section>
 
   <!-- 2) Rams -->
   <section id="rams" class="section">
     <form id="rams-form">
-      <table>
-        <caption>قائمة أغنام ذكور</caption>
-        <thead>
-          <tr>
-            <th>رقم</th><th>تاريخ شراء</th><th>ثمن شراء</th>
-            <th>الوضعيّة</th><th>مصاريف</th><th>تاريخ / ثمن بيع</th><th></th>
-          </tr>
-        </thead>
-        <tbody id="rams-table"></tbody>
-        <tfoot>
-          <tr>
-            <td><input name="id"            placeholder="رقم" required /></td>
-            <td><input name="purchaseDate"  type="date" /></td>
-            <td><input name="purchasePrice" placeholder="ثمن شراء" /></td>
-            <td><input name="status"        placeholder="الوضعيّة" /></td>
-            <td><input name="expenses"      placeholder="مصاريف" /></td>
-            <td>
-              <input name="sellDate"  type="date" placeholder="تاريخ بيع" />
-              <input name="sellPrice" placeholder="ثمن بيع" />
-            </td>
-            <td><button type="submit">أضف ذكر</button></td>
-          </tr>
-        </tfoot>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <caption>قائمة أغنام ذكور</caption>
+          <thead>
+            <tr>
+              <th>رقم</th><th>تاريخ شراء</th><th>ثمن شراء</th>
+              <th>الوضعيّة</th><th>مصاريف</th>
+              <th>تاريخ / ثمن بيع</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="rams-table"></tbody>
+          <tfoot>
+            <tr>
+              <td><input name="id"            placeholder="رقم" required /></td>
+              <td><input name="purchaseDate"  type="date" /></td>
+              <td><input name="purchasePrice" placeholder="ثمن شراء" /></td>
+              <td><input name="status"        placeholder="الوضعيّة" /></td>
+              <td><input name="expenses"      placeholder="مصاريف" /></td>
+              <td>
+                <input name="sellDate"  type="date" placeholder="تاريخ بيع" />
+                <input name="sellPrice" placeholder="ثمن بيع" />
+              </td>
+              <td><button type="submit">أضف ذكر</button></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </form>
   </section>
 
   <!-- 3) Lambs -->
   <section id="lambs" class="section">
     <form id="lambs-form">
-      <table>
-        <caption>قائمة أولاد أغنام</caption>
-        <thead>
-          <tr>
-            <th>رقم</th><th>تاريخ شراء</th><th>ثمن شراء</th>
-            <th>تاريخ دواء</th><th>مصاريف</th><th>تاريخ / ثمن بيع</th><th></th>
-          </tr>
-        </thead>
-        <tbody id="lambs-table"></tbody>
-        <tfoot>
-          <tr>
-            <td><input name="id"            placeholder="رقم" required /></td>
-            <td><input name="purchaseDate"  type="date" /></td>
-            <td><input name="purchasePrice" placeholder="ثمن شراء" /></td>
-            <td><input name="medDate"       type="date" /></td>
-            <td><input name="expenses"      placeholder="مصاريف" /></td>
-            <td>
-              <input name="sellDate"  type="date" placeholder="تاريخ بيع" />
-              <input name="sellPrice" placeholder="ثمن بيع" />
-            </td>
-            <td><button type="submit">أضف ولادة</button></td>
-          </tr>
-        </tfoot>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <caption>قائمة أولاد أغنام</caption>
+          <thead>
+            <tr>
+              <th>رقم</th><th>تاريخ شراء</th><th>ثمن شراء</th>
+              <th>تاريخ دواء</th><th>مصاريف</th>
+              <th>تاريخ / ثمن بيع</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="lambs-table"></tbody>
+          <tfoot>
+            <tr>
+              <td><input name="id"            placeholder="رقم" required /></td>
+              <td><input name="purchaseDate"  type="date" /></td>
+              <td><input name="purchasePrice" placeholder="ثمن شراء" /></td>
+              <td><input name="medDate"       type="date" /></td>
+              <td><input name="expenses"      placeholder="مصاريف" /></td>
+              <td>
+                <input name="sellDate"  type="date" placeholder="تاريخ بيع" />
+                <input name="sellPrice" placeholder="ثمن بيع" />
+              </td>
+              <td><button type="submit">أضف ولادة</button></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </form>
   </section>
 
   <!-- 4) Chickens -->
   <section id="chickens" class="section">
     <form id="chickens-form">
-      <table>
-        <caption>قائمة الدجاج</caption>
-        <thead>
-          <tr>
-            <th>نوع</th><th>جنس</th><th>عدد</th>
-            <th>تاريخ شراء</th><th>ثمن شراء</th>
-            <th>تاريخ دواء</th><th>مصاريف</th>
-            <th>تاريخ بيع</th><th>ثمن بيع</th><th></th>
-          </tr>
-        </thead>
-        <tbody id="chickens-table"></tbody>
-        <tfoot>
-          <tr>
-            <td><input name="type"         placeholder="نوع" required /></td>
-            <td><input name="gender"       placeholder="جنس" /></td>
-            <td><input name="count"        type="number" placeholder="عدد" /></td>
-            <td><input name="purchaseDate" type="date" /></td>
-            <td><input name="purchasePrice"placeholder="ثمن شراء" /></td>
-            <td><input name="medDate"      type="date" /></td>
-            <td><input name="expenses"     placeholder="مصاريف" /></td>
-            <td><input name="sellDate"     type="date" /></td>
-            <td><input name="sellPrice"    placeholder="ثمن بيع" /></td>
-            <td><button type="submit">أضف دجاج</button></td>
-          </tr>
-        </tfoot>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <caption>قائمة الدجاج</caption>
+          <thead>
+            <tr>
+              <th>نوع</th><th>جنس</th><th>عدد</th>
+              <th>تاريخ شراء</th><th>ثمن شراء</th>
+              <th>تاريخ دواء</th><th>مصاريف</th>
+              <th>تاريخ بيع</th><th>ثمن بيع</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="chickens-table"></tbody>
+          <tfoot>
+            <tr>
+              <td><input name="type"         placeholder="نوع" required /></td>
+              <td><input name="gender"       placeholder="جنس" /></td>
+              <td><input name="count"        type="number" placeholder="عدد" /></td>
+              <td><input name="purchaseDate" type="date" /></td>
+              <td><input name="purchasePrice"placeholder="ثمن شراء" /></td>
+              <td><input name="medDate"      type="date" /></td>
+              <td><input name="expenses"     placeholder="مصاريف" /></td>
+              <td><input name="sellDate"     type="date" /></td>
+              <td><input name="sellPrice"    placeholder="ثمن بيع" /></td>
+              <td><button type="submit">أضف دجاج</button></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </form>
   </section>
 
   <!-- 5) Olive Trees -->
   <section id="olives" class="section">
     <form id="olives-form">
-      <table>
-        <caption>أشجار الزيتون كاموني</caption>
-        <thead>
-          <tr>
-            <th>عدد</th><th>تاريخ زرع</th><th>تاريخ دواء</th>
-            <th>تاريخ قطاف</th><th>مصاريف دواء</th><th></th>
-          </tr>
-        </thead>
-        <tbody id="olives-table"></tbody>
-        <tfoot>
-          <tr>
-            <td><input name="count"       type="number" placeholder="عدد" required /></td>
-            <td><input name="plantDate"   type="date" /></td>
-            <td><input name="medDate"     type="date" /></td>
-            <td><input name="harvestDate" type="date" /></td>
-            <td><input name="medCosts"    placeholder="مصاريف دواء" /></td>
-            <td><button type="submit">أضف أشجار</button></td>
-          </tr>
-        </tfoot>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <caption>أشجار الزيتون كاموني</caption>
+          <thead>
+            <tr>
+              <th>عدد</th><th>تاريخ زرع</th>
+              <th>تاريخ دواء</th><th>تاريخ قطاف</th><th>مصاريف دواء</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="olives-table"></tbody>
+          <tfoot>
+            <tr>
+              <td><input name="count"       type="number" placeholder="عدد" required /></td>
+              <td><input name="plantDate"   type="date" /></td>
+              <td><input name="medDate"     type="date" /></td>
+              <td><input name="harvestDate" type="date" /></td>
+              <td><input name="medCosts"    placeholder="مصاريف دواء" /></td>
+              <td><button type="submit">أضف أشجار</button></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </form>
   </section>
 
   <script type="module" src="script.js"></script>
 </body>
 </html>
-
 
 

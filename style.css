@@ -87,12 +87,17 @@ nav a.active {
   opacity: 1;
 }
 
+/* --- Table wrapper for horizontal scroll --- */
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
 /* --- Tables & Forms --- */
 table {
   width: 100%;
   border-collapse: collapse;
   background: #fff;
-  margin-bottom: 1rem;
 }
 caption {
   caption-side: top;
@@ -141,5 +146,30 @@ table button {
 table button:hover {
   background: var(--primary-light);
   transform: scale(1.02);
+}
+
+/* --- Responsive tweaks --- */
+@media (max-width: 768px) {
+  .farm-card {
+    padding: 1.2rem 1.8rem;
+    font-size: 1.1rem;
+  }
+  nav a {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+  .section {
+    margin: 1rem;
+  }
+  caption {
+    font-size: 1.2em;
+  }
+  th, td {
+    padding: 0.4rem;
+  }
+  table input,
+  table button {
+    font-size: 0.9em;
+  }
 }
 
