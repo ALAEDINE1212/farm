@@ -1,10 +1,11 @@
-import { initializeApp }    from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
-import { getAnalytics }     from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-analytics.js';
+import { initializeApp }        from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js';
+import { getAnalytics }         from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-analytics.js';
 import {
   getDatabase,
   ref,
   onValue,
-  push
+  push,
+  remove
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js';
 
 // ← Replace with your Firebase config ↓
@@ -19,11 +20,12 @@ const firebaseConfig = {
   measurementId: "G-EJJ5B4T1L6"
 };
 
+// Initialize Firebase
 const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db        = getDatabase(app);
 
-// fields under each node
+// Fields under each node
 const fieldsMap = {
   ewes:     ["id","status","medDate","expenses","sellDate","sellPrice"],
   rams:     ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
@@ -32,13 +34,29 @@ const fieldsMap = {
   olives:   ["count","plantDate","medDate","harvestDate","medCosts"]
 };
 
+let selectedFarm = null;
+
 window.addEventListener("DOMContentLoaded", () => {
   const sections = Object.keys(fieldsMap);
+  const farmSelect = document.getElementById('farm-select');
+  const nav        = document.querySelector('nav');
 
-  // hide all
+  // Hide all sections initially
   sections.forEach(id => document.getElementById(id).classList.remove("active"));
 
-  // nav click toggles sections
+  // Farm-card click → pick farm
+  document.querySelectorAll('.farm-card').forEach(card => {
+    card.addEventListener('click', () => {
+      selectedFarm = card.dataset.farm;           // "sefrou" or "kamouni"
+      farmSelect.style.display = 'none';          // hide selector
+      nav.classList.add('visible');               // show navbar
+      initDataListeners();                        // start Firebase sync
+      // auto-click first section
+      document.querySelector('nav a[data-section="ewes"]').click();
+    });
+  });
+
+  // Nav links → show/hide sections
   document.querySelectorAll("nav a").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
@@ -52,40 +70,55 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // wire up Firebase listeners & forms
-  sections.forEach(sec => {
-    const dbRef = ref(db, sec);
-    const tbody = document.querySelector(`#${sec}-table`);
-    const form  = document.querySelector(`#${sec}-form`);
-    const fields= fieldsMap[sec];
+  // Wire up Firebase for each section under selectedFarm
+  function initDataListeners() {
+    sections.forEach(sec => {
+      const nodeRef = ref(db, `${selectedFarm}/${sec}`);
+      const tbody   = document.querySelector(`#${sec}-table`);
+      const form    = document.querySelector(`#${sec}-form`);
+      const fields  = fieldsMap[sec];
 
-    // render on update
-    onValue(dbRef, snap => {
-      tbody.innerHTML = "";
-      snap.forEach(child => {
-        const data = child.val();
-        const tr = document.createElement("tr");
-        fields.forEach(f => {
-          const td = document.createElement("td");
-          // combine date/price for rams & lambs
-          if ((sec === "rams" || sec === "lambs") && f === "sellDate") {
-            td.textContent = `${data.sellDate||""} / ${data.sellPrice||""}`;
-          } else {
-            td.textContent = data[f] || "";
-          }
-          tr.appendChild(td);
+      // On data change → render rows + delete buttons
+      onValue(nodeRef, snap => {
+        tbody.innerHTML = "";
+        snap.forEach(childSnap => {
+          const data = childSnap.val();
+          const key  = childSnap.key;
+          const tr   = document.createElement("tr");
+
+          fields.forEach(f => {
+            const td = document.createElement("td");
+            if ((sec === "rams" || sec === "lambs") && f === "sellDate") {
+              td.textContent = `${data.sellDate||""} / ${data.sellPrice||""}`;
+            } else {
+              td.textContent = data[f] || "";
+            }
+            tr.appendChild(td);
+          });
+
+          // Delete button
+          const delTd = document.createElement("td");
+          const btn   = document.createElement("button");
+          btn.textContent = "حذف";
+          btn.addEventListener("click", () => {
+            remove(ref(db, `${selectedFarm}/${sec}/${key}`));
+          });
+          delTd.appendChild(btn);
+          tr.appendChild(delTd);
+
+          tbody.appendChild(tr);
         });
-        tbody.appendChild(tr);
+      });
+
+      // On form submit → push new record
+      form.addEventListener("submit", e => {
+        e.preventDefault();
+        const payload = {};
+        fields.forEach(f => payload[f] = form[f].value);
+        push(ref(db, `${selectedFarm}/${sec}`), payload);
+        form.reset();
       });
     });
-
-    // add new record
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-      const payload = {};
-      fields.forEach(f => payload[f] = form[f].value);
-      push(dbRef, payload);
-      form.reset();
-    });
-  });
+  }
 });
+

@@ -1,12 +1,16 @@
 :root {
-  --primary:      #4a7c59;
-  --primary-light:#6fa87e;
-  --dark:         #2f5d3b;
-  --bg:           #f2f7fa;
-  --text:         #333;
+  --primary:       #4a7c59;
+  --primary-light: #6fa87e;
+  --dark:          #2f5d3b;
+  --bg:            #f2f7fa;
+  --text:          #333;
 }
 
-* { box-sizing:border-box; margin:0; padding:0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-family: 'Cairo', sans-serif;
@@ -15,85 +19,126 @@ body {
   direction: rtl;
 }
 
+/* --- Farm Select Screen --- */
+.farm-select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 2rem;
+}
+.farm-card {
+  background: var(--primary);
+  color: #fff;
+  padding: 2rem 3rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+}
+.farm-card:hover {
+  background: var(--primary-light);
+  transform: scale(1.05);
+}
+
+/* --- Navigation --- */
 nav {
-  position: sticky; top:0; z-index:10;
-  display: flex; justify-content:center; gap:1rem;
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
   background: linear-gradient(90deg, var(--primary), var(--dark));
-  padding:1rem;
+  padding: 1rem;
+}
+nav.visible {
+  display: flex;
 }
 nav a {
-  color:#fff; text-decoration:none; font-weight:600;
-  padding:0.5rem 1rem; border-radius:50px;
-  transition:background 0.2s,transform 0.2s;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  transition: background 0.2s, transform 0.2s;
 }
-nav a:hover, nav a.active {
+nav a:hover,
+nav a.active {
   background: rgba(255,255,255,0.2);
   transform: scale(1.05);
 }
 
+/* --- Sections --- */
 .section {
-  max-width:1000px;
-  margin:2rem auto;
-  overflow:hidden;
-  max-height:0;
-  opacity:0;
-  transition:max-height 0.5s ease,opacity 0.5s ease;
+  max-width: 1000px;
+  margin: 2rem auto;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
 }
 .section.active {
-  max-height:2000px;
-  opacity:1;
+  max-height: 2000px;
+  opacity: 1;
 }
 
+/* --- Tables & Forms --- */
 table {
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
-  margin-bottom:1rem;
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  margin-bottom: 1rem;
 }
 caption {
   caption-side: top;
   text-align: right;
-  padding:0.5rem 0;
-  font-size:1.4em;
-  font-weight:600;
+  padding: 0.5rem 0;
+  font-size: 1.4em;
+  font-weight: 600;
   color: var(--dark);
 }
 th, td {
-  border:1px solid #ddd;
-  padding:0.6rem;
-  text-align:center;
+  border: 1px solid #ddd;
+  padding: 0.6rem;
+  text-align: center;
 }
 thead th {
   background: var(--dark);
-  color:#fff;
-  border:none;
+  color: #fff;
+  border: none;
 }
 
-/* make inputs/buttons fill their cell */
+/* inputs/buttons fill full cell */
 table input,
 table button {
-  width:100%;
+  width: 100%;
   font-family: inherit;
-  font-size:1em;
+  font-size: 1em;
 }
 table input {
-  padding:0.4rem;
-  border:1px solid #ccc;
-  border-radius:4px;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 table input:focus {
-  outline:none;
+  outline: none;
   border-color: var(--primary);
 }
 table button {
-  padding:0.5rem;
+  padding: 0.5rem;
   background: var(--primary);
   color: #fff;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-  transition:background 0.2s;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
 }
 table button:hover {
   background: var(--primary-light);
+  transform: scale(1.02);
 }

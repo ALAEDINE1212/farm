@@ -13,6 +13,13 @@
 </head>
 <body>
 
+  <!-- Farm selector -->
+  <div id="farm-select" class="farm-select">
+    <div class="farm-card" data-farm="sefrou">مزرعة صفرو</div>
+    <div class="farm-card" data-farm="kamouni">مزرعة كاموني</div>
+  </div>
+
+  <!-- Navigation (hidden until farm chosen) -->
   <nav>
     <a href="#" data-section="ewes">أغنام إناث</a>
     <a href="#" data-section="rams">أغنام ذكور</a>
@@ -28,12 +35,8 @@
         <caption>قائمة أغنام إناث</caption>
         <thead>
           <tr>
-            <th>رقم</th>
-            <th>الوضعيّة</th>
-            <th>تاريخ دواء</th>
-            <th>مصاريف</th>
-            <th>تاريخ بيع</th>
-            <th>ثمن بيع</th>
+            <th>رقم</th><th>الوضعيّة</th><th>تاريخ دواء</th>
+            <th>مصاريف</th><th>تاريخ بيع</th><th>ثمن بيع</th>
             <th></th>
           </tr>
         </thead>
@@ -60,13 +63,8 @@
         <caption>قائمة أغنام ذكور</caption>
         <thead>
           <tr>
-            <th>رقم</th>
-            <th>تاريخ شراء</th>
-            <th>ثمن شراء</th>
-            <th>الوضعيّة</th>
-            <th>مصاريف</th>
-            <th>تاريخ / ثمن بيع</th>
-            <th></th>
+            <th>رقم</th><th>تاريخ شراء</th><th>ثمن شراء</th>
+            <th>الوضعيّة</th><th>مصاريف</th><th>تاريخ / ثمن بيع</th><th></th>
           </tr>
         </thead>
         <tbody id="rams-table"></tbody>
@@ -78,7 +76,6 @@
             <td><input name="status"        placeholder="الوضعيّة" /></td>
             <td><input name="expenses"      placeholder="مصاريف" /></td>
             <td>
-              <!-- sellDate+sellPrice combined in one cell -->
               <input name="sellDate"  type="date" placeholder="تاريخ بيع" />
               <input name="sellPrice" placeholder="ثمن بيع" />
             </td>
@@ -96,13 +93,8 @@
         <caption>قائمة أولاد أغنام</caption>
         <thead>
           <tr>
-            <th>رقم</th>
-            <th>تاريخ شراء</th>
-            <th>ثمن شراء</th>
-            <th>تاريخ دواء</th>
-            <th>مصاريف</th>
-            <th>تاريخ / ثمن بيع</th>
-            <th></th>
+            <th>رقم</th><th>تاريخ شراء</th><th>ثمن شراء</th>
+            <th>تاريخ دواء</th><th>مصاريف</th><th>تاريخ / ثمن بيع</th><th></th>
           </tr>
         </thead>
         <tbody id="lambs-table"></tbody>
@@ -131,16 +123,10 @@
         <caption>قائمة الدجاج</caption>
         <thead>
           <tr>
-            <th>نوع</th>
-            <th>جنس</th>
-            <th>عدد</th>
-            <th>تاريخ شراء</th>
-            <th>ثمن شراء</th>
-            <th>تاريخ دواء</th>
-            <th>مصاريف</th>
-            <th>تاريخ بيع</th>
-            <th>ثمن بيع</th>
-            <th></th>
+            <th>نوع</th><th>جنس</th><th>عدد</th>
+            <th>تاريخ شراء</th><th>ثمن شراء</th>
+            <th>تاريخ دواء</th><th>مصاريف</th>
+            <th>تاريخ بيع</th><th>ثمن بيع</th><th></th>
           </tr>
         </thead>
         <tbody id="chickens-table"></tbody>
@@ -169,12 +155,8 @@
         <caption>أشجار الزيتون كاموني</caption>
         <thead>
           <tr>
-            <th>عدد</th>
-            <th>تاريخ زرع</th>
-            <th>تاريخ دواء</th>
-            <th>تاريخ قطاف</th>
-            <th>مصاريف دواء</th>
-            <th></th>
+            <th>عدد</th><th>تاريخ زرع</th>
+            <th>تاريخ دواء</th><th>تاريخ قطاف</th><th>مصاريف دواء</th><th></th>
           </tr>
         </thead>
         <tbody id="olives-table"></tbody>
@@ -192,6 +174,7 @@
     </form>
   </section>
 
+  <!-- Firebase + app logic -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
