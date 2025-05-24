@@ -8,7 +8,7 @@
   --text-secondary:#888;
 }
 
-* { box-sizing:border-box; margin:0; padding:0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: 'Cairo', sans-serif;
   background: var(--bg);
@@ -16,13 +16,13 @@ body {
   direction: rtl;
 }
 
-/* Farm‐select */
+/* Farm-select screen */
 .farm-select {
-  display:flex; justify-content:center; align-items:center;
+  display: flex; justify-content:center; align-items:center;
   height:100vh; gap:2rem; background:var(--bg);
 }
 .farm-card {
-  background:var(--primary); color:#fff;
+  background: var(--primary); color:#fff;
   padding:2rem 3rem; border-radius:8px;
   cursor:pointer; text-align:center;
   font-size:1.3rem; font-weight:600;
@@ -30,15 +30,15 @@ body {
   transition:transform .2s, background .2s;
 }
 .farm-card:hover {
-  background:var(--primary-light);
-  transform:scale(1.05);
+  background: var(--primary-light);
+  transform: scale(1.05);
 }
 
 /* Sidebar */
 .sidebar {
   position:fixed; top:0; right:0;
   width:200px; height:100vh;
-  background:var(--surface);
+  background: var(--surface);
   box-shadow:-2px 0 6px rgba(0,0,0,0.5);
   padding-top:1rem; display:none; z-index:20;
 }
@@ -53,10 +53,10 @@ body {
 .sidebar a:hover,
 .sidebar a.active {
   background: var(--primary);
-  color:#fff;
+  color: #fff;
 }
 
-/* Main */
+/* Main content margin for sidebar */
 .main-content {
   margin-right:200px; padding:1rem;
 }
@@ -90,9 +90,11 @@ body {
   border:none; padding:.5rem 1rem; border-radius:4px;
   cursor:pointer; transition:background .2s;
 }
-.item-form button:hover { background:var(--primary-light); }
+.item-form button:hover {
+  background:var(--primary-light);
+}
 
-/* Overview grid */
+/* Overview grid & list */
 .overview-wrap {
   display:grid;
   grid-template-columns: repeat(3,1fr);
@@ -101,12 +103,13 @@ body {
 }
 .overview-header {
   background: var(--primary);
-  color:#fff;
-  padding:.75rem; font-weight:600; text-align:center;
+  color:#fff; padding:.75rem; font-weight:600;
+  text-align:center;
 }
+/* VERTICAL STACK instead of side-by-side */
 .overview-list {
-  grid-column:1/-1; display:grid;
-  grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  grid-column:1 / -1;
+  display:block;
 }
 .overview-item {
   display:grid;
@@ -115,10 +118,18 @@ body {
   cursor:pointer; transition:background .2s;
 }
 .overview-item:nth-child(odd) {
-  background:rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.05);
 }
 .overview-item:hover {
   background: var(--primary-light);
+}
+
+/* Total expenses row */
+.overview-total {
+  grid-column:1 / -1;
+  background: var(--dark);
+  color:#fff; padding:.75rem;
+  text-align:right; font-weight:600;
 }
 
 /* Modal */
@@ -142,8 +153,7 @@ body {
   display:flex; flex-direction:column; gap:.75rem; margin-top:1rem;
 }
 .detail-form label {
-  color:var(--text-secondary);
-  font-weight:600;
+  color:var(--text-secondary); font-weight:600;
 }
 .detail-form input {
   padding:.5rem; background:#2a2a2a; border:1px solid #444;
@@ -154,7 +164,9 @@ body {
   padding:.5rem; border-radius:4px; cursor:pointer;
   transition:background .2s;
 }
-.detail-form button:hover { background:var(--primary-light); }
+.detail-form button:hover {
+  background:var(--primary-light);
+}
 .btn-close {
   position:absolute; top:.5rem; right:.5rem;
   background:none; border:none; color:var(--text);

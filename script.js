@@ -24,7 +24,7 @@ const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db        = getDatabase(app);
 
-// all sections & their fields
+// section → fields
 const sectionsMap = {
   ewes:      ["id","status","medDate","expenses","sellDate","sellPrice"],
   rams:      ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
@@ -34,7 +34,7 @@ const sectionsMap = {
   cowFemales:["id","status","medDate","expenses","sellDate","sellPrice"],
   cowMales:  ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"]
 };
-// three‐column overviews; olives now shows harvestDate
+// overview columns [label, key]
 const overviewMap = {
   ewes:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
   rams:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
@@ -76,7 +76,7 @@ window.addEventListener("DOMContentLoaded",()=>{
     document.querySelectorAll("#sidebar a").forEach(a=>a.classList.remove("active"));
   });
 
-  // section toggles
+  // toggle sections
   document.querySelectorAll("#sidebar a[data-section]").forEach(link=>{
     link.addEventListener("click",e=>{
       e.preventDefault();
@@ -100,6 +100,7 @@ window.addEventListener("DOMContentLoaded",()=>{
 
       onValue(dbRef,snap=>{
         overview.innerHTML="";
+        // items
         snap.forEach(child=>{
           const data=child.val(), key=child.key;
           const item=document.createElement("div");
@@ -112,8 +113,23 @@ window.addEventListener("DOMContentLoaded",()=>{
           item.addEventListener("click",()=>openModal(sec,key,data));
           overview.appendChild(item);
         });
+
+        // total expenses
+        let total=0;
+        snap.forEach(ch=>{
+          const num=parseFloat(ch.val().expenses);
+          if(!isNaN(num)) total+=num;
+        });
+        let totalDiv=overview.parentElement.querySelector(".overview-total");
+        if(!totalDiv){
+          totalDiv=document.createElement("div");
+          totalDiv.classList.add("overview-total");
+          overview.parentElement.appendChild(totalDiv);
+        }
+        totalDiv.textContent=`مجموع المصاريف: ${total}`;
       });
 
+      // add new
       form.addEventListener("submit",e=>{
         e.preventDefault();
         const payload={};

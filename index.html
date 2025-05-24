@@ -18,7 +18,7 @@
     <div class="farm-card" data-farm="kamouni">مزرعة كاموني</div>
   </div>
 
-  <!-- Sidebar menu (hidden until farm chosen) -->
+  <!-- Sidebar menu -->
   <aside id="sidebar" class="sidebar">
     <nav>
       <a href="#" data-section="ewes">أغنام إناث</a>
@@ -34,16 +34,15 @@
 
   <!-- Main content -->
   <main id="main-content" class="main-content">
-    <!-- Sections: same pattern as before, plus cows -->
+
     <!-- 1) Ewes -->
     <section id="ewes" class="section">
       <form id="ewes-form" class="item-form">
-        <!-- inputs (hidden on mobile cards) -->
-        <input name="id" placeholder="رقم" required />
-        <input name="status" placeholder="الوضعيّة" />
-        <input name="medDate" type="date" />
-        <input name="expenses" placeholder="مصاريف" />
-        <input name="sellDate" type="date" />
+        <input name="id"        placeholder="رقم" required />
+        <input name="status"    placeholder="الوضعيّة" />
+        <input name="medDate"   type="date" />
+        <input name="expenses"  placeholder="مصاريف" />
+        <input name="sellDate"  type="date" />
         <input name="sellPrice" placeholder="ثمن بيع" />
         <button type="submit">أضف أنثى</button>
       </form>
@@ -58,13 +57,13 @@
     <!-- 2) Rams -->
     <section id="rams" class="section">
       <form id="rams-form" class="item-form">
-        <input name="id" placeholder="رقم" required />
-        <input name="purchaseDate" type="date" />
+        <input name="id"            placeholder="رقم" required />
+        <input name="purchaseDate"  type="date" />
         <input name="purchasePrice" placeholder="ثمن شراء" />
-        <input name="status" placeholder="الوضعيّة" />
-        <input name="expenses" placeholder="مصاريف" />
-        <input name="sellDate" type="date" />
-        <input name="sellPrice" placeholder="ثمن بيع" />
+        <input name="status"        placeholder="الوضعيّة" />
+        <input name="expenses"      placeholder="مصاريف" />
+        <input name="sellDate"      type="date" />
+        <input name="sellPrice"     placeholder="ثمن بيع" />
         <button type="submit">أضف ذكر</button>
       </form>
       <div class="overview-wrap">
@@ -78,13 +77,13 @@
     <!-- 3) Lambs -->
     <section id="lambs" class="section">
       <form id="lambs-form" class="item-form">
-        <input name="id" placeholder="رقم" required />
-        <input name="purchaseDate" type="date" />
+        <input name="id"            placeholder="رقم" required />
+        <input name="purchaseDate"  type="date" />
         <input name="purchasePrice" placeholder="ثمن شراء" />
-        <input name="medDate" type="date" />
-        <input name="expenses" placeholder="مصاريف" />
-        <input name="sellDate" type="date" />
-        <input name="sellPrice" placeholder="ثمن بيع" />
+        <input name="medDate"       type="date" />
+        <input name="expenses"      placeholder="مصاريف" />
+        <input name="sellDate"      type="date" />
+        <input name="sellPrice"     placeholder="ثمن بيع" />
         <button type="submit">أضف ولادة</button>
       </form>
       <div class="overview-wrap">
@@ -98,15 +97,15 @@
     <!-- 4) Chickens -->
     <section id="chickens" class="section">
       <form id="chickens-form" class="item-form">
-        <input name="type" placeholder="نوع" required />
-        <input name="gender" placeholder="جنس" />
-        <input name="count" type="number" placeholder="عدد" />
+        <input name="type"         placeholder="نوع" required />
+        <input name="gender"       placeholder="جنس" />
+        <input name="count"        type="number" placeholder="عدد" />
         <input name="purchaseDate" type="date" />
-        <input name="purchasePrice" placeholder="ثمن شراء" />
-        <input name="medDate" type="date" />
-        <input name="expenses" placeholder="مصاريف" />
-        <input name="sellDate" type="date" />
-        <input name="sellPrice" placeholder="ثمن بيع" />
+        <input name="purchasePrice"placeholder="ثمن شراء" />
+        <input name="medDate"      type="date" />
+        <input name="expenses"     placeholder="مصاريف" />
+        <input name="sellDate"     type="date" />
+        <input name="sellPrice"    placeholder="ثمن بيع" />
         <button type="submit">أضف دجاج</button>
       </form>
       <div class="overview-wrap">
@@ -120,17 +119,17 @@
     <!-- 5) Olives -->
     <section id="olives" class="section">
       <form id="olives-form" class="item-form">
-        <input name="count" type="number" placeholder="عدد" required />
-        <input name="plantDate" type="date" />
-        <input name="medDate" type="date" />
+        <input name="count"       type="number" placeholder="عدد" required />
+        <input name="plantDate"   type="date" />
+        <input name="medDate"     type="date" />
         <input name="harvestDate" type="date" />
-        <input name="medCosts" placeholder="مصاريف دواء" />
+        <input name="medCosts"    placeholder="مصاريف دواء" />
         <button type="submit">أضف أشجار</button>
       </form>
       <div class="overview-wrap">
         <div class="overview-header">عدد</div>
-        <div class="overview-header">مصاريف</div>
-        <div class="overview-header">ثمن بيع</div>
+        <div class="overview-header">مصاريف دواء</div>
+        <div class="overview-header">تاريخ قطاف</div>
         <div id="olives-overview" class="overview-list"></div>
       </div>
     </section>
@@ -138,11 +137,11 @@
     <!-- 6) Cow Females -->
     <section id="cowFemales" class="section">
       <form id="cowFemales-form" class="item-form">
-        <input name="id" placeholder="رقم" required />
-        <input name="status" placeholder="الوضعيّة" />
-        <input name="medDate" type="date" />
-        <input name="expenses" placeholder="مصاريف" />
-        <input name="sellDate" type="date" />
+        <input name="id"        placeholder="رقم" required />
+        <input name="status"    placeholder="الوضعيّة" />
+        <input name="medDate"   type="date" />
+        <input name="expenses"  placeholder="مصاريف" />
+        <input name="sellDate"  type="date" />
         <input name="sellPrice" placeholder="ثمن بيع" />
         <button type="submit">أضف بقرة إناث</button>
       </form>
@@ -157,13 +156,13 @@
     <!-- 7) Cow Males -->
     <section id="cowMales" class="section">
       <form id="cowMales-form" class="item-form">
-        <input name="id" placeholder="رقم" required />
-        <input name="purchaseDate" type="date" />
+        <input name="id"            placeholder="رقم" required />
+        <input name="purchaseDate"  type="date" />
         <input name="purchasePrice" placeholder="ثمن شراء" />
-        <input name="status" placeholder="الوضعيّة" />
-        <input name="expenses" placeholder="مصاريف" />
-        <input name="sellDate" type="date" />
-        <input name="sellPrice" placeholder="ثمن بيع" />
+        <input name="status"        placeholder="الوضعيّة" />
+        <input name="expenses"      placeholder="مصاريف" />
+        <input name="sellDate"      type="date" />
+        <input name="sellPrice"     placeholder="ثمن بيع" />
         <button type="submit">أضف بقرة ذكور</button>
       </form>
       <div class="overview-wrap">
@@ -173,6 +172,7 @@
         <div id="cowMales-overview" class="overview-list"></div>
       </div>
     </section>
+
   </main>
 
   <!-- Detail/Edit Modal -->
@@ -180,10 +180,8 @@
     <div class="modal-backdrop"></div>
     <div class="modal-content">
       <h3 id="detail-title"></h3>
-      <form id="detail-form" class="detail-form">
-        <!-- JS will inject fields here -->
-      </form>
-      <button id="detail-close" class="btn-close">إغلاق</button>
+      <form id="detail-form" class="detail-form"></form>
+      <button id="detail-close" class="btn-close">×</button>
     </div>
   </div>
 
