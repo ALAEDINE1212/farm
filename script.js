@@ -53,7 +53,7 @@ const fieldLabelMap = {
   medDate:       "تاريخ الدواء",
   purchaseDate:  "تاريخ الشراء",
   purchasePrice: "ثمن الشراء",
-  expenses:      "مصــاريف",
+  expenses:      "مصاريف",
   sellDate:      "تاريخ البيع",
   sellPrice:     "ثمن البيع",
   count:         "عدد",
@@ -77,9 +77,12 @@ window.addEventListener("DOMContentLoaded", () => {
   const modalTitle = document.getElementById("detail-title");
   const closeBtn   = document.getElementById("detail-close");
 
-  // 0) set date-input placeholders in add-forms
+  // 0) label every date‐input so new users see what's what
   document.querySelectorAll(".item-form input[type='date']").forEach(inp => {
-    inp.placeholder = fieldLabelMap[inp.name] || "";
+    const label = fieldLabelMap[inp.name] || "";
+    inp.setAttribute("aria-label", label);
+    inp.setAttribute("title", label);
+    inp.placeholder = label; // some browsers will show this
   });
 
   // 1) pick farm
@@ -117,7 +120,7 @@ window.addEventListener("DOMContentLoaded", () => {
   // 4) close modal
   closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
 
-  // init Firebase listeners & form handlers
+  // initialize DB listeners + form handlers
   function initListeners() {
     Object.keys(sectionsMap).forEach(sec => {
       const fields   = sectionsMap[sec];
@@ -142,7 +145,7 @@ window.addEventListener("DOMContentLoaded", () => {
           overview.appendChild(item);
         });
 
-        // compute & show total expenses
+        // total expenses
         let total = 0;
         snap.forEach(child => {
           const val = parseFloat(child.val().expenses);
@@ -157,7 +160,7 @@ window.addEventListener("DOMContentLoaded", () => {
         totalDiv.textContent = `مجموع المصاريف: ${total}`;
       });
 
-      // form submit → push new record
+      // form submit → push new
       form.addEventListener("submit", e => {
         e.preventDefault();
         const payload = {};
@@ -185,7 +188,7 @@ window.addEventListener("DOMContentLoaded", () => {
       modalForm.appendChild(inp);
     });
 
-    // Save button
+    // Save
     const save = document.createElement("button");
     save.textContent = "تحديث";
     save.addEventListener("click", e => {
@@ -198,7 +201,7 @@ window.addEventListener("DOMContentLoaded", () => {
       modal.classList.add("hidden");
     });
 
-    // Delete button
+    // Delete
     const del = document.createElement("button");
     del.textContent = "حذف نهائي";
     del.style.background = "#c62828";
@@ -213,4 +216,5 @@ window.addEventListener("DOMContentLoaded", () => {
     modal.classList.remove("hidden");
   }
 });
+
 
