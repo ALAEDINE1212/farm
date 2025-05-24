@@ -5,127 +5,120 @@ import {
   ref,
   onValue,
   push,
+  update,
   remove
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js';
 
-// → Replace with your Firebase config ↓
+// ← your Firebase config ↓
 const firebaseConfig = {
-  apiKey: "AIzaSyBgxLUjJQKbMh9xTBbnqOUitVuJaOo72ro",
+  apiKey: "AIzaSyBgx...",
   authDomain: "farm-b8de3.firebaseapp.com",
   databaseURL: "https://farm-b8de3-default-rtdb.firebaseio.com",
   projectId: "farm-b8de3",
   storageBucket: "farm-b8de3.appspot.com",
   messagingSenderId: "1026170713438",
-  appId: "1:1026170713438:web:b9269ae28a4b8042160bcf",
+  appId: "1:1026170713438:web:...",
   measurementId: "G-EJJ5B4T1L6"
 };
 
-// Initialize Firebase
+// init
 const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db        = getDatabase(app);
 
-// Fields under each node
-const fieldsMap = {
-  ewes:     ["id","status","medDate","expenses","sellDate","sellPrice"],
-  rams:     ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
-  lambs:    ["id","purchaseDate","purchasePrice","medDate","expenses","sellDate","sellPrice"],
-  chickens: ["type","gender","count","purchaseDate","purchasePrice","medDate","expenses","sellDate","sellPrice"],
-  olives:   ["count","plantDate","medDate","harvestDate","medCosts"]
+// all sections & their fields
+const sectionsMap = {
+  ewes:      ["id","status","medDate","expenses","sellDate","sellPrice"],
+  rams:      ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
+  lambs:     ["id","purchaseDate","purchasePrice","medDate","expenses","sellDate","sellPrice"],
+  chickens:  ["type","gender","count","purchaseDate","purchasePrice","medDate","expenses","sellDate","sellPrice"],
+  olives:    ["count","plantDate","medDate","harvestDate","medCosts"],
+  cowFemales:["id","status","medDate","expenses","sellDate","sellPrice"],
+  cowMales:  ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"]
 };
-
-// Arabic header labels for cards
-const headerLabelsMap = {
-  ewes:     ["رقم","الوضعيّة","تاريخ دواء","مصاريف","تاريخ بيع","ثمن بيع"],
-  rams:     ["رقم","تاريخ شراء","ثمن شراء","الوضعيّة","مصاريف","تاريخ / ثمن بيع"],
-  lambs:    ["رقم","تاريخ شراء","ثمن شراء","تاريخ دواء","مصاريف","تاريخ / ثمن بيع"],
-  chickens: ["نوع","جنس","عدد","تاريخ شراء","ثمن شراء","تاريخ دواء","مصاريف","تاريخ بيع","ثمن بيع"],
-  olives:   ["عدد","تاريخ زرع","تاريخ دواء","تاريخ قطاف","مصاريف دواء"]
+// overview columns: [label, fieldKey]
+const overviewMap = {
+  ewes:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
+  rams:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
+  lambs:     [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
+  chickens:  [["نوع","type"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
+  olives:    [["عدد","count"],["مصاريف","medCosts"],["ثمن بيع",""]],
+  cowFemales:[["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
+  cowMales:  [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]]
 };
 
 let selectedFarm = null;
+let currentList  = null;
+let currentKey   = null;
 
 window.addEventListener("DOMContentLoaded", () => {
-  const sections   = Object.keys(fieldsMap);
   const farmSelect = document.getElementById("farm-select");
-  const nav        = document.querySelector("nav");
+  const sidebar    = document.getElementById("sidebar");
+  const main       = document.getElementById("main-content");
   const switchBtn  = document.getElementById("switch-farm");
+  const modal      = document.getElementById("detail-modal");
+  const modalForm  = document.getElementById("detail-form");
+  const modalTitle = document.getElementById("detail-title");
+  const closeBtn   = document.getElementById("detail-close");
 
-  // hide nav + sections on load
-  nav.classList.remove("visible");
-  sections.forEach(id => document.getElementById(id).classList.remove("active"));
-
-  // pick a farm
-  document.querySelectorAll(".farm-card").forEach(card => {
-    card.addEventListener("click", () => {
-      selectedFarm = card.dataset.farm;    // “sefrou” or “kamouni”
+  // pick farm
+  document.querySelectorAll(".farm-card").forEach(c => {
+    c.addEventListener("click", () => {
+      selectedFarm = c.dataset.farm;
       farmSelect.style.display = "none";
-      nav.classList.add("visible");
-      initDataListeners();
-      document.querySelector('nav a[data-section="ewes"]').click();
+      sidebar.style.display    = "block";
+      initListeners();
     });
   });
-
   // switch farm
   switchBtn.addEventListener("click", e => {
     e.preventDefault();
     selectedFarm = null;
     farmSelect.style.display = "flex";
-    nav.classList.remove("visible");
-    sections.forEach(id => document.getElementById(id).classList.remove("active"));
-    document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
+    sidebar.style.display    = "none";
+    document.querySelectorAll(".section").forEach(s => s.style.display = "none");
   });
 
-  // show/hide sections
-  document.querySelectorAll("nav a[data-section]").forEach(link => {
+  // toggle sections
+  document.querySelectorAll("#sidebar a[data-section]").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
-      const sec = link.dataset.section;
-      document.querySelectorAll("nav a").forEach(a => a.classList.remove("active"));
+      currentList = link.dataset.section;
+      document.querySelectorAll("#sidebar a").forEach(a=>a.classList.remove("active"));
       link.classList.add("active");
-      sections.forEach(id => {
-        document.getElementById(id).classList.toggle("active", id === sec);
-      });
+      document.querySelectorAll(".section").forEach(s=>s.style.display="none");
+      document.getElementById(currentList).style.display="block";
     });
   });
 
-  // wire up Firebase per section
-  function initDataListeners() {
-    sections.forEach(sec => {
-      const nodeRef = ref(db, `${selectedFarm}/${sec}`);
-      const tbody   = document.querySelector(`#${sec}-table`);
-      const form    = document.querySelector(`#${sec}-form`);
-      const fields  = fieldsMap[sec];
+  // modal close
+  closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
 
-      onValue(nodeRef, snap => {
-        tbody.innerHTML = "";
+  function initListeners() {
+    Object.keys(sectionsMap).forEach(sec => {
+      const fields   = sectionsMap[sec];
+      const overview = document.getElementById(`${sec}-overview`);
+      const form     = document.getElementById(`${sec}-form`);
+      const dbRef    = ref(db, `${selectedFarm}/${sec}`);
+
+      // on value
+      onValue(dbRef, snap => {
+        overview.innerHTML = "";
         snap.forEach(child => {
           const data = child.val(), key = child.key;
-          const tr   = document.createElement("tr");
-
-          fields.forEach((f, i) => {
-            const td = document.createElement("td");
-            td.setAttribute("data-label", headerLabelsMap[sec][i] || "");
-            if ((sec === "rams"||sec==="lambs") && f==="sellDate") {
-              td.textContent = `${data.sellDate||""} / ${data.sellPrice||""}`;
-            } else {
-              td.textContent = data[f] || "";
-            }
-            tr.appendChild(td);
+          // build overview card
+          const item = document.createElement("div");
+          item.classList.add("overview-item");
+          overviewMap[sec].forEach(([_,f])=>{
+            const div = document.createElement("div");
+            div.textContent = data[f]||"";
+            item.appendChild(div);
           });
-
-          // delete button cell
-          const delTd = document.createElement("td");
-          delTd.setAttribute("data-label", "");
-          const btn = document.createElement("button");
-          btn.textContent = "حذف";
-          btn.addEventListener("click", () => {
-            remove(ref(db, `${selectedFarm}/${sec}/${key}`));
+          // click to open modal
+          item.addEventListener("click", () => {
+            openModal(sec, key, data);
           });
-          delTd.appendChild(btn);
-          tr.appendChild(delTd);
-
-          tbody.appendChild(tr);
+          overview.appendChild(item);
         });
       });
 
@@ -134,10 +127,52 @@ window.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         const payload = {};
         fields.forEach(f => payload[f] = form[f].value);
-        push(ref(db, `${selectedFarm}/${sec}`), payload);
+        push(dbRef, payload);
         form.reset();
       });
     });
+  }
+
+  function openModal(sec, key, data) {
+    currentKey = key;
+    modalTitle.textContent = `تفاصيل ${sec}`;
+    modalForm.innerHTML = "";
+    // build form fields
+    sectionsMap[sec].forEach(f => {
+      const lbl = document.createElement("label");
+      lbl.textContent = f;
+      const inp = document.createElement("input");
+      inp.name = f;
+      inp.value = data[f]||"";
+      if (f.toLowerCase().includes("date")) inp.type = "date";
+      modalForm.appendChild(lbl);
+      modalForm.appendChild(inp);
+    });
+    // Save button
+    const saveBtn = document.createElement("button");
+    saveBtn.textContent = "تحديث";
+    saveBtn.addEventListener("click", e => {
+      e.preventDefault();
+      const updates = {};
+      Array.from(modalForm.elements)
+        .filter(el=>el.name)
+        .forEach(el=> updates[el.name] = el.value);
+      update(ref(db, `${selectedFarm}/${currentList}/${currentKey}`), updates);
+      modal.classList.add("hidden");
+    });
+    // Delete button
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "حذف نهائي";
+    delBtn.style.background = "#c62828";
+    delBtn.addEventListener("click", e=>{
+      e.preventDefault();
+      remove(ref(db, `${selectedFarm}/${currentList}/${currentKey}`));
+      modal.classList.add("hidden");
+    });
+    modalForm.appendChild(saveBtn);
+    modalForm.appendChild(delBtn);
+
+    modal.classList.remove("hidden");
   }
 });
 
