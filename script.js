@@ -35,25 +35,25 @@ const sectionsMap = {
   cowMales:  ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"]
 };
 
-// overview columns [label, key]
+// overview columns [label,key]
 const overviewMap = {
   ewes:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
   rams:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
   lambs:     [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
   chickens:  [["نوع","type"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
-  olives:    [["عدد","count"],["مصاريف دواء","medCosts"],["تاريخ قطاف","harvestDate"]],
+  olives:    [["عدد","count"],["مصاريف دواء","medCosts"],["تاريخ القطاف","harvestDate"]],
   cowFemales:[["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
   cowMales:  [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]]
 };
 
-// fully Arabic field labels for modal
+// field → Arabic label
 const fieldLabelMap = {
   id:            "رقم",
   status:        "الوضعيّة",
   medDate:       "تاريخ الدواء",
   purchaseDate:  "تاريخ الشراء",
   purchasePrice: "ثمن الشراء",
-  expenses:      "مصاريف",
+  expenses:      "مصــاريف",
   sellDate:      "تاريخ البيع",
   sellPrice:     "ثمن البيع",
   count:         "عدد",
@@ -76,6 +76,11 @@ window.addEventListener("DOMContentLoaded", () => {
   const modalForm  = document.getElementById("detail-form");
   const modalTitle = document.getElementById("detail-title");
   const closeBtn   = document.getElementById("detail-close");
+
+  // 0) set date-input placeholders in add-forms
+  document.querySelectorAll(".item-form input[type='date']").forEach(inp => {
+    inp.placeholder = fieldLabelMap[inp.name] || "";
+  });
 
   // 1) pick farm
   document.querySelectorAll(".farm-card").forEach(c => {
@@ -109,10 +114,10 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 4) modal close
+  // 4) close modal
   closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
 
-  // initialize listeners for each section
+  // init Firebase listeners & form handlers
   function initListeners() {
     Object.keys(sectionsMap).forEach(sec => {
       const fields   = sectionsMap[sec];
@@ -139,9 +144,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
         // compute & show total expenses
         let total = 0;
-        snap.forEach(ch => {
-          const num = parseFloat(ch.val().expenses);
-          if (!isNaN(num)) total += num;
+        snap.forEach(child => {
+          const val = parseFloat(child.val().expenses);
+          if (!isNaN(val)) total += val;
         });
         let totalDiv = overview.parentElement.querySelector(".overview-total");
         if (!totalDiv) {
@@ -152,7 +157,7 @@ window.addEventListener("DOMContentLoaded", () => {
         totalDiv.textContent = `مجموع المصاريف: ${total}`;
       });
 
-      // add new record
+      // form submit → push new record
       form.addEventListener("submit", e => {
         e.preventDefault();
         const payload = {};
@@ -163,7 +168,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // open & build modal for details/edit
+  // open & populate modal
   function openModal(sec, key, data) {
     currentKey = key;
     modalTitle.textContent = `تفاصيل ${fieldLabelMap[sectionsMap[sec][0]] || sec}`;
@@ -180,6 +185,7 @@ window.addEventListener("DOMContentLoaded", () => {
       modalForm.appendChild(inp);
     });
 
+    // Save button
     const save = document.createElement("button");
     save.textContent = "تحديث";
     save.addEventListener("click", e => {
@@ -192,6 +198,7 @@ window.addEventListener("DOMContentLoaded", () => {
       modal.classList.add("hidden");
     });
 
+    // Delete button
     const del = document.createElement("button");
     del.textContent = "حذف نهائي";
     del.style.background = "#c62828";
@@ -206,3 +213,4 @@ window.addEventListener("DOMContentLoaded", () => {
     modal.classList.remove("hidden");
   }
 });
+
