@@ -24,7 +24,6 @@ const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db        = getDatabase(app);
 
-// section → field keys
 const sectionsMap = {
   ewes:      ["id","status","medDate","expenses","sellDate","sellPrice"],
   rams:      ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
@@ -34,8 +33,6 @@ const sectionsMap = {
   cowFemales:["id","status","medDate","expenses","sellDate","sellPrice"],
   cowMales:  ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"]
 };
-
-// overview columns [label,key]
 const overviewMap = {
   ewes:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
   rams:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
@@ -45,8 +42,6 @@ const overviewMap = {
   cowFemales:[["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
   cowMales:  [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]]
 };
-
-// field → Arabic label
 const fieldLabelMap = {
   id:            "رقم",
   status:        "الوضعيّة",
@@ -77,12 +72,12 @@ window.addEventListener("DOMContentLoaded", () => {
   const modalTitle = document.getElementById("detail-title");
   const closeBtn   = document.getElementById("detail-close");
 
-  // 0) label every date‐input so new users see what's what
+  // Add-forms: placeholder & title for dates
   document.querySelectorAll(".item-form input[type='date']").forEach(inp => {
     const label = fieldLabelMap[inp.name] || "";
     inp.setAttribute("aria-label", label);
     inp.setAttribute("title", label);
-    inp.placeholder = label; // some browsers will show this
+    inp.placeholder = label;
   });
 
   // 1) pick farm
@@ -120,7 +115,6 @@ window.addEventListener("DOMContentLoaded", () => {
   // 4) close modal
   closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
 
-  // initialize DB listeners + form handlers
   function initListeners() {
     Object.keys(sectionsMap).forEach(sec => {
       const fields   = sectionsMap[sec];
@@ -131,7 +125,7 @@ window.addEventListener("DOMContentLoaded", () => {
       onValue(dbRef, snap => {
         overview.innerHTML = "";
 
-        // build overview items
+        // build overview list
         snap.forEach(child => {
           const data = child.val(), key = child.key;
           const item = document.createElement("div");
@@ -148,8 +142,8 @@ window.addEventListener("DOMContentLoaded", () => {
         // total expenses
         let total = 0;
         snap.forEach(child => {
-          const val = parseFloat(child.val().expenses);
-          if (!isNaN(val)) total += val;
+          const v = parseFloat(child.val().expenses);
+          if (!isNaN(v)) total += v;
         });
         let totalDiv = overview.parentElement.querySelector(".overview-total");
         if (!totalDiv) {
@@ -160,7 +154,7 @@ window.addEventListener("DOMContentLoaded", () => {
         totalDiv.textContent = `مجموع المصاريف: ${total}`;
       });
 
-      // form submit → push new
+      // form submit
       form.addEventListener("submit", e => {
         e.preventDefault();
         const payload = {};
@@ -171,7 +165,6 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // open & populate modal
   function openModal(sec, key, data) {
     currentKey = key;
     modalTitle.textContent = `تفاصيل ${fieldLabelMap[sectionsMap[sec][0]] || sec}`;
@@ -216,5 +209,6 @@ window.addEventListener("DOMContentLoaded", () => {
     modal.classList.remove("hidden");
   }
 });
+
 
 
