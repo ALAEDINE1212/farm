@@ -24,7 +24,7 @@ const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db        = getDatabase(app);
 
-// ← نحدث هنا sectionsMap حتى نضيف "purchasePrice" إلى أقسام ewes و cowFemales
+// ← نضيف "purchasePrice" لأقسام ewes و cowFemales
 const sectionsMap = {
   ewes:      ["id","status","purchasePrice","medDate","expenses","sellDate","sellPrice"],
   rams:      ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
@@ -114,7 +114,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // hide all sections & show selected
       document.querySelectorAll(".section").forEach(s => s.style.display = "none");
       document.getElementById(currentList).style.display = "block";
-      // ensure its section-body is hidden again (on each new section)
+      // ensure its section-body is hidden again
       const body = document.getElementById(currentList).querySelector(".section-body");
       if (body) {
         body.style.display = "none";
@@ -138,7 +138,6 @@ window.addEventListener("DOMContentLoaded", () => {
       onValue(dbRef, snap => {
         overview.innerHTML = "";
 
-        // ← نجمع ثلاث متغيرات: expenses & purchasePrice & sellPrice
         let totalExpenses = 0;
         let totalPurchase = 0;
         let totalSell     = 0;
@@ -152,7 +151,7 @@ window.addEventListener("DOMContentLoaded", () => {
           row.classList.add("overview-item");
           overview.appendChild(row);
 
-          // append each column in that row (حسب overviewMap)
+          // append each column in that row
           overviewMap[sec].forEach(([colName, colKey]) => {
             const cell = document.createElement("div");
             cell.textContent = data[colKey] || "";
@@ -170,7 +169,7 @@ window.addEventListener("DOMContentLoaded", () => {
             }
           });
 
-          // ← accumulate purchase price (بيانات الشراء) إن وجدت
+          // accumulate purchase price if present
           const buyVal = parseFloat(data.purchasePrice);
           if (!isNaN(buyVal)) {
             totalPurchase += buyVal;
@@ -230,7 +229,7 @@ window.addEventListener("DOMContentLoaded", () => {
           });
         });
 
-        // ← بعد الانتهاء من اللوب، نضيف أربعة صفوف للإجماليات
+        // after the loop, append four summary rows:
         // 1) Total Expenses
         const totalCostRow = document.createElement("div");
         totalCostRow.classList.add("overview-total");
@@ -270,11 +269,11 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // 6) set up toggles for each section’s “.section-toggle”
+    // 6) set up toggles for each button
     document.querySelectorAll(".section-toggle").forEach(btn => {
       btn.addEventListener("click", () => {
         const body = btn.nextElementSibling;
-        // toggle between “none” and “block”
+        // فقط هذا العنصر المخفي (div.section-body) يتم إظهاره/إخفاؤه
         if (body.style.display === "block") {
           body.style.display = "none";
         } else {
@@ -284,6 +283,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
