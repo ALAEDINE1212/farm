@@ -35,282 +35,316 @@
   <!-- Main content -->
   <main id="main-content" class="main-content">
 
-    <!-- 1) Ewes -->
+    <!-- 1) Ewes (أغنام إناث) -->
     <section id="ewes" class="section">
-      <form id="ewes-form" class="item-form">
-        <div class="field-group">
-          <label for="ewes-id">رقم</label>
-          <input id="ewes-id" name="id" required />
+      <!-- Toggle button with rounded‐corner box -->
+      <button class="section-toggle">أغنام إناث</button>
+      <!-- Body hidden by default -->
+      <div class="section-body">
+        <form id="ewes-form" class="item-form">
+          <div class="field-group">
+            <label for="ewes-id">رقم</label>
+            <input id="ewes-id" name="id" required />
+          </div>
+          <div class="field-group">
+            <label for="ewes-status">الوضعيّة</label>
+            <input id="ewes-status" name="status" />
+          </div>
+          <!-- ← Here we added the Purchase-Price field -->
+          <div class="field-group">
+            <label for="ewes-purchasePrice">ثمن الشراء</label>
+            <input id="ewes-purchasePrice" name="purchasePrice" />
+          </div>
+          <div class="field-group">
+            <label for="ewes-medDate">تاريخ الدواء</label>
+            <input id="ewes-medDate" name="medDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="ewes-expenses">مصاريف</label>
+            <input id="ewes-expenses" name="expenses" />
+          </div>
+          <div class="field-group">
+            <label for="ewes-sellDate">تاريخ البيع</label>
+            <input id="ewes-sellDate" name="sellDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="ewes-sellPrice">ثمن البيع</label>
+            <input id="ewes-sellPrice" name="sellPrice" />
+          </div>
+          <button type="submit">أضف أنثى</button>
+        </form>
+        <div class="overview-wrap">
+          <div class="overview-header">رقم</div>
+          <div class="overview-header">مصاريف</div>
+          <div class="overview-header">ثمن بيع</div>
+          <div id="ewes-overview" class="overview-list"></div>
+          <!-- The 4 summary rows will be appended here by script.js -->
         </div>
-        <div class="field-group">
-          <label for="ewes-status">الوضعيّة</label>
-          <input id="ewes-status" name="status" />
-        </div>
-        <div class="field-group">
-          <label for="ewes-medDate">تاريخ الدواء</label>
-          <input id="ewes-medDate" name="medDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="ewes-expenses">مصاريف</label>
-          <input id="ewes-expenses" name="expenses" />
-        </div>
-        <div class="field-group">
-          <label for="ewes-sellDate">تاريخ البيع</label>
-          <input id="ewes-sellDate" name="sellDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="ewes-sellPrice">ثمن البيع</label>
-          <input id="ewes-sellPrice" name="sellPrice" />
-        </div>
-        <button type="submit">أضف أنثى</button>
-      </form>
-      <div class="overview-wrap">
-        <div class="overview-header">رقم</div>
-        <div class="overview-header">مصاريف</div>
-        <div class="overview-header">ثمن بيع</div>
-        <div id="ewes-overview" class="overview-list"></div>
       </div>
     </section>
 
-    <!-- 2) Rams -->
+    <!-- 2) Rams (أغنام ذكور) -->
     <section id="rams" class="section">
-      <form id="rams-form" class="item-form">
-        <div class="field-group">
-          <label for="rams-id">رقم</label>
-          <input id="rams-id" name="id" required />
+      <button class="section-toggle">أغنام ذكور</button>
+      <div class="section-body">
+        <form id="rams-form" class="item-form">
+          <div class="field-group">
+            <label for="rams-id">رقم</label>
+            <input id="rams-id" name="id" required />
+          </div>
+          <div class="field-group">
+            <label for="rams-purchaseDate">تاريخ الشراء</label>
+            <input id="rams-purchaseDate" name="purchaseDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="rams-purchasePrice">ثمن الشراء</label>
+            <input id="rams-purchasePrice" name="purchasePrice" />
+          </div>
+          <div class="field-group">
+            <label for="rams-status">الوضعيّة</label>
+            <input id="rams-status" name="status" />
+          </div>
+          <div class="field-group">
+            <label for="rams-expenses">مصاريف</label>
+            <input id="rams-expenses" name="expenses" />
+          </div>
+          <div class="field-group">
+            <label for="rams-sellDate">تاريخ البيع</label>
+            <input id="rams-sellDate" name="sellDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="rams-sellPrice">ثمن البيع</label>
+            <input id="rams-sellPrice" name="sellPrice" />
+          </div>
+          <button type="submit">أضف ذكر</button>
+        </form>
+        <div class="overview-wrap">
+          <div class="overview-header">رقم</div>
+          <div class="overview-header">مصاريف</div>
+          <div class="overview-header">ثمن بيع</div>
+          <div id="rams-overview" class="overview-list"></div>
         </div>
-        <div class="field-group">
-          <label for="rams-purchaseDate">تاريخ الشراء</label>
-          <input id="rams-purchaseDate" name="purchaseDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="rams-purchasePrice">ثمن الشراء</label>
-          <input id="rams-purchasePrice" name="purchasePrice" />
-        </div>
-        <div class="field-group">
-          <label for="rams-status">الوضعيّة</label>
-          <input id="rams-status" name="status" />
-        </div>
-        <div class="field-group">
-          <label for="rams-expenses">مصاريف</label>
-          <input id="rams-expenses" name="expenses" />
-        </div>
-        <div class="field-group">
-          <label for="rams-sellDate">تاريخ البيع</label>
-          <input id="rams-sellDate" name="sellDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="rams-sellPrice">ثمن البيع</label>
-          <input id="rams-sellPrice" name="sellPrice" />
-        </div>
-        <button type="submit">أضف ذكر</button>
-      </form>
-      <div class="overview-wrap">
-        <div class="overview-header">رقم</div>
-        <div class="overview-header">مصاريف</div>
-        <div class="overview-header">ثمن بيع</div>
-        <div id="rams-overview" class="overview-list"></div>
       </div>
     </section>
 
-    <!-- 3) Lambs -->
+    <!-- 3) Lambs (أولاد أغنام) -->
     <section id="lambs" class="section">
-      <form id="lambs-form" class="item-form">
-        <div class="field-group">
-          <label for="lambs-id">رقم</label>
-          <input id="lambs-id" name="id" required />
+      <button class="section-toggle">أولاد أغنام</button>
+      <div class="section-body">
+        <form id="lambs-form" class="item-form">
+          <div class="field-group">
+            <label for="lambs-id">رقم</label>
+            <input id="lambs-id" name="id" required />
+          </div>
+          <div class="field-group">
+            <label for="lambs-purchaseDate">تاريخ الشراء</label>
+            <input id="lambs-purchaseDate" name="purchaseDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="lambs-purchasePrice">ثمن الشراء</label>
+            <input id="lambs-purchasePrice" name="purchasePrice" />
+          </div>
+          <div class="field-group">
+            <label for="lambs-medDate">تاريخ الدواء</label>
+            <input id="lambs-medDate" name="medDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="lambs-expenses">مصاريف</label>
+            <input id="lambs-expenses" name="expenses" />
+          </div>
+          <div class="field-group">
+            <label for="lambs-sellDate">تاريخ البيع</label>
+            <input id="lambs-sellDate" name="sellDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="lambs-sellPrice">ثمن البيع</label>
+            <input id="lambs-sellPrice" name="sellPrice" />
+          </div>
+          <button type="submit">أضف ولادة</button>
+        </form>
+        <div class="overview-wrap">
+          <div class="overview-header">رقم</div>
+          <div class="overview-header">مصاريف</div>
+          <div class="overview-header">ثمن بيع</div>
+          <div id="lambs-overview" class="overview-list"></div>
         </div>
-        <div class="field-group">
-          <label for="lambs-purchaseDate">تاريخ الشراء</label>
-          <input id="lambs-purchaseDate" name="purchaseDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="lambs-purchasePrice">ثمن الشراء</label>
-          <input id="lambs-purchasePrice" name="purchasePrice" />
-        </div>
-        <div class="field-group">
-          <label for="lambs-medDate">تاريخ الدواء</label>
-          <input id="lambs-medDate" name="medDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="lambs-expenses">مصاريف</label>
-          <input id="lambs-expenses" name="expenses" />
-        </div>
-        <div class="field-group">
-          <label for="lambs-sellDate">تاريخ البيع</label>
-          <input id="lambs-sellDate" name="sellDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="lambs-sellPrice">ثمن البيع</label>
-          <input id="lambs-sellPrice" name="sellPrice" />
-        </div>
-        <button type="submit">أضف ولادة</button>
-      </form>
-      <div class="overview-wrap">
-        <div class="overview-header">رقم</div>
-        <div class="overview-header">مصاريف</div>
-        <div class="overview-header">ثمن بيع</div>
-        <div id="lambs-overview" class="overview-list"></div>
       </div>
     </section>
 
-    <!-- 4) Chickens -->
+    <!-- 4) Chickens (الدجاج) -->
     <section id="chickens" class="section">
-      <form id="chickens-form" class="item-form">
-        <div class="field-group">
-          <label for="chickens-type">نوع</label>
-          <input id="chickens-type" name="type" required />
+      <button class="section-toggle">الدجاج</button>
+      <div class="section-body">
+        <form id="chickens-form" class="item-form">
+          <div class="field-group">
+            <label for="chickens-type">نوع</label>
+            <input id="chickens-type" name="type" />
+          </div>
+          <div class="field-group">
+            <label for="chickens-gender">جنس</label>
+            <input id="chickens-gender" name="gender" />
+          </div>
+          <div class="field-group">
+            <label for="chickens-count">عدد</label>
+            <input id="chickens-count" name="count" />
+          </div>
+          <div class="field-group">
+            <label for="chickens-purchaseDate">تاريخ الشراء</label>
+            <input id="chickens-purchaseDate" name="purchaseDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="chickens-purchasePrice">ثمن الشراء</label>
+            <input id="chickens-purchasePrice" name="purchasePrice" />
+          </div>
+          <div class="field-group">
+            <label for="chickens-medDate">تاريخ الدواء</label>
+            <input id="chickens-medDate" name="medDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="chickens-expenses">مصاريف</label>
+            <input id="chickens-expenses" name="expenses" />
+          </div>
+          <div class="field-group">
+            <label for="chickens-sellDate">تاريخ البيع</label>
+            <input id="chickens-sellDate" name="sellDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="chickens-sellPrice">ثمن البيع</label>
+            <input id="chickens-sellPrice" name="sellPrice" />
+          </div>
+          <button type="submit">أضف دجاج</button>
+        </form>
+        <div class="overview-wrap">
+          <div class="overview-header">نوع</div>
+          <div class="overview-header">مصاريف</div>
+          <div class="overview-header">ثمن بيع</div>
+          <div id="chickens-overview" class="overview-list"></div>
         </div>
-        <div class="field-group">
-          <label for="chickens-gender">جنس</label>
-          <input id="chickens-gender" name="gender" />
-        </div>
-        <div class="field-group">
-          <label for="chickens-count">عدد</label>
-          <input id="chickens-count" name="count" type="number" />
-        </div>
-        <div class="field-group">
-          <label for="chickens-purchaseDate">تاريخ الشراء</label>
-          <input id="chickens-purchaseDate" name="purchaseDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="chickens-purchasePrice">ثمن الشراء</label>
-          <input id="chickens-purchasePrice" name="purchasePrice" />
-        </div>
-        <div class="field-group">
-          <label for="chickens-medDate">تاريخ الدواء</label>
-          <input id="chickens-medDate" name="medDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="chickens-expenses">مصاريف</label>
-          <input id="chickens-expenses" name="expenses" />
-        </div>
-        <div class="field-group">
-          <label for="chickens-sellDate">تاريخ البيع</label>
-          <input id="chickens-sellDate" name="sellDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="chickens-sellPrice">ثمن البيع</label>
-          <input id="chickens-sellPrice" name="sellPrice" />
-        </div>
-        <button type="submit">أضف دجاج</button>
-      </form>
-      <div class="overview-wrap">
-        <div class="overview-header">نوع</div>
-        <div class="overview-header">مصاريف</div>
-        <div class="overview-header">ثمن بيع</div>
-        <div id="chickens-overview" class="overview-list"></div>
       </div>
     </section>
 
-    <!-- 5) Olives -->
+    <!-- 5) Olives (أشجار الزيتون) -->
     <section id="olives" class="section">
-      <form id="olives-form" class="item-form">
-        <div class="field-group">
-          <label for="olives-count">عدد</label>
-          <input id="olives-count" name="count" type="number" required />
+      <button class="section-toggle">أشجار الزيتون</button>
+      <div class="section-body">
+        <form id="olives-form" class="item-form">
+          <div class="field-group">
+            <label for="olives-count">عدد</label>
+            <input id="olives-count" name="count" type="number" required />
+          </div>
+          <div class="field-group">
+            <label for="olives-plantDate">تاريخ الزرع</label>
+            <input id="olives-plantDate" name="plantDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="olives-medDate">تاريخ الدواء</label>
+            <input id="olives-medDate" name="medDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="olives-harvestDate">تاريخ القطاف</label>
+            <input id="olives-harvestDate" name="harvestDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="olives-medCosts">مصاريف دواء</label>
+            <input id="olives-medCosts" name="medCosts" />
+          </div>
+          <button type="submit">أضف شجرة</button>
+        </form>
+        <div class="overview-wrap">
+          <div class="overview-header">عدد</div>
+          <div class="overview-header">مصاريف دواء</div>
+          <div class="overview-header">تاريخ القطاف</div>
+          <div id="olives-overview" class="overview-list"></div>
         </div>
-        <div class="field-group">
-          <label for="olives-plantDate">تاريخ الزرع</label>
-          <input id="olives-plantDate" name="plantDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="olives-medDate">تاريخ الدواء</label>
-          <input id="olives-medDate" name="medDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="olives-harvestDate">تاريخ القطاف</label>
-          <input id="olives-harvestDate" name="harvestDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="olives-medCosts">مصاريف دواء</label>
-          <input id="olives-medCosts" name="medCosts" />
-        </div>
-        <button type="submit">أضف أشجار</button>
-      </form>
-      <div class="overview-wrap">
-        <div class="overview-header">عدد</div>
-        <div class="overview-header">مصاريف دواء</div>
-        <div class="overview-header">تاريخ القطاف</div>
-        <div id="olives-overview" class="overview-list"></div>
       </div>
     </section>
 
-    <!-- 6) Cow Females -->
+    <!-- 6) Cow Females (بقرة إناث) -->
     <section id="cowFemales" class="section">
-      <form id="cowFemales-form" class="item-form">
-        <div class="field-group">
-          <label for="cowFemales-id">رقم</label>
-          <input id="cowFemales-id" name="id" required />
+      <button class="section-toggle">بقرة إناث</button>
+      <div class="section-body">
+        <form id="cowFemales-form" class="item-form">
+          <div class="field-group">
+            <label for="cowFemales-id">رقم</label>
+            <input id="cowFemales-id" name="id" required />
+          </div>
+          <div class="field-group">
+            <label for="cowFemales-status">الوضعيّة</label>
+            <input id="cowFemales-status" name="status" />
+          </div>
+          <!-- ← Here we added the Purchase-Price field -->
+          <div class="field-group">
+            <label for="cowFemales-purchasePrice">ثمن الشراء</label>
+            <input id="cowFemales-purchasePrice" name="purchasePrice" />
+          </div>
+          <div class="field-group">
+            <label for="cowFemales-medDate">تاريخ الدواء</label>
+            <input id="cowFemales-medDate" name="medDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="cowFemales-expenses">مصاريف</label>
+            <input id="cowFemales-expenses" name="expenses" />
+          </div>
+          <div class="field-group">
+            <label for="cowFemales-sellDate">تاريخ البيع</label>
+            <input id="cowFemales-sellDate" name="sellDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="cowFemales-sellPrice">ثمن البيع</label>
+            <input id="cowFemales-sellPrice" name="sellPrice" />
+          </div>
+          <button type="submit">أضف بقرة إناث</button>
+        </form>
+        <div class="overview-wrap">
+          <div class="overview-header">رقم</div>
+          <div class="overview-header">مصاريف</div>
+          <div class="overview-header">ثمن بيع</div>
+          <div id="cowFemales-overview" class="overview-list"></div>
         </div>
-        <div class="field-group">
-          <label for="cowFemales-status">الوضعيّة</label>
-          <input id="cowFemales-status" name="status" />
-        </div>
-        <div class="field-group">
-          <label for="cowFemales-medDate">تاريخ الدواء</label>
-          <input id="cowFemales-medDate" name="medDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="cowFemales-expenses">مصاريف</label>
-          <input id="cowFemales-expenses" name="expenses" />
-        </div>
-        <div class="field-group">
-          <label for="cowFemales-sellDate">تاريخ البيع</label>
-          <input id="cowFemales-sellDate" name="sellDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="cowFemales-sellPrice">ثمن البيع</label>
-          <input id="cowFemales-sellPrice" name="sellPrice" />
-        </div>
-        <button type="submit">أضف بقرة إناث</button>
-      </form>
-      <div class="overview-wrap">
-        <div class="overview-header">رقم</div>
-        <div class="overview-header">مصاريف</div>
-        <div class="overview-header">ثمن بيع</div>
-        <div id="cowFemales-overview" class="overview-list"></div>
       </div>
     </section>
 
-    <!-- 7) Cow Males -->
+    <!-- 7) Cow Males (بقرة ذكور) -->
     <section id="cowMales" class="section">
-      <form id="cowMales-form" class="item-form">
-        <div class="field-group">
-          <label for="cowMales-id">رقم</label>
-          <input id="cowMales-id" name="id" required />
+      <button class="section-toggle">بقرة ذكور</button>
+      <div class="section-body">
+        <form id="cowMales-form" class="item-form">
+          <div class="field-group">
+            <label for="cowMales-id">رقم</label>
+            <input id="cowMales-id" name="id" required />
+          </div>
+          <div class="field-group">
+            <label for="cowMales-purchaseDate">تاريخ الشراء</label>
+            <input id="cowMales-purchaseDate" name="purchaseDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="cowMales-purchasePrice">ثمن الشراء</label>
+            <input id="cowMales-purchasePrice" name="purchasePrice" />
+          </div>
+          <div class="field-group">
+            <label for="cowMales-status">الوضعيّة</label>
+            <input id="cowMales-status" name="status" />
+          </div>
+          <div class="field-group">
+            <label for="cowMales-expenses">مصاريف</label>
+            <input id="cowMales-expenses" name="expenses" />
+          </div>
+          <div class="field-group">
+            <label for="cowMales-sellDate">تاريخ البيع</label>
+            <input id="cowMales-sellDate" name="sellDate" type="date" />
+          </div>
+          <div class="field-group">
+            <label for="cowMales-sellPrice">ثمن البيع</label>
+            <input id="cowMales-sellPrice" name="sellPrice" />
+          </div>
+          <button type="submit">أضف بقرة ذكور</button>
+        </form>
+        <div class="overview-wrap">
+          <div class="overview-header">رقم</div>
+          <div class="overview-header">مصاريف</div>
+          <div class="overview-header">ثمن بيع</div>
+          <div id="cowMales-overview" class="overview-list"></div>
         </div>
-        <div class="field-group">
-          <label for="cowMales-purchaseDate">تاريخ الشراء</label>
-          <input id="cowMales-purchaseDate" name="purchaseDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="cowMales-purchasePrice">ثمن الشراء</label>
-          <input id="cowMales-purchasePrice" name="purchasePrice" />
-        </div>
-        <div class="field-group">
-          <label for="cowMales-status">الوضعيّة</label>
-          <input id="cowMales-status" name="status" />
-        </div>
-        <div class="field-group">
-          <label for="cowMales-expenses">مصاريف</label>
-          <input id="cowMales-expenses" name="expenses" />
-        </div>
-        <div class="field-group">
-          <label for="cowMales-sellDate">تاريخ البيع</label>
-          <input id="cowMales-sellDate" name="sellDate" type="date" />
-        </div>
-        <div class="field-group">
-          <label for="cowMales-sellPrice">ثمن البيع</label>
-          <input id="cowMales-sellPrice" name="sellPrice" />
-        </div>
-        <button type="submit">أضف بقرة ذكور</button>
-      </form>
-      <div class="overview-wrap">
-        <div class="overview-header">رقم</div>
-        <div class="overview-header">مصاريف</div>
-        <div class="overview-header">ثمن بيع</div>
-        <div id="cowMales-overview" class="overview-list"></div>
       </div>
     </section>
 
@@ -329,3 +363,4 @@
   <script type="module" src="script.js"></script>
 </body>
 </html>
+

@@ -24,15 +24,17 @@ const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db        = getDatabase(app);
 
+// ← نحدث هنا sectionsMap حتى نضيف "purchasePrice" إلى أقسام ewes و cowFemales
 const sectionsMap = {
-  ewes:      ["id","status","medDate","expenses","sellDate","sellPrice"],
+  ewes:      ["id","status","purchasePrice","medDate","expenses","sellDate","sellPrice"],
   rams:      ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
   lambs:     ["id","purchaseDate","purchasePrice","medDate","expenses","sellDate","sellPrice"],
   chickens:  ["type","gender","count","purchaseDate","purchasePrice","medDate","expenses","sellDate","sellPrice"],
   olives:    ["count","plantDate","medDate","harvestDate","medCosts"],
-  cowFemales:["id","status","medDate","expenses","sellDate","sellPrice"],
+  cowFemales:["id","status","purchasePrice","medDate","expenses","sellDate","sellPrice"],
   cowMales:  ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"]
 };
+
 const overviewMap = {
   ewes:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
   rams:      [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
@@ -42,6 +44,7 @@ const overviewMap = {
   cowFemales:[["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]],
   cowMales:  [["رقم","id"],["مصاريف","expenses"],["ثمن بيع","sellPrice"]]
 };
+
 const fieldLabelMap = {
   id:            "رقم",
   status:        "الوضعيّة",
@@ -100,115 +103,188 @@ window.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("#sidebar a").forEach(a => a.classList.remove("active"));
   });
 
-  // 3) toggle sections
+  // 3) toggle sections from sidebar
   document.querySelectorAll("#sidebar a[data-section]").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
       currentList = link.dataset.section;
+      // mark active link
       document.querySelectorAll("#sidebar a").forEach(a => a.classList.remove("active"));
       link.classList.add("active");
+      // hide all sections & show selected
       document.querySelectorAll(".section").forEach(s => s.style.display = "none");
       document.getElementById(currentList).style.display = "block";
+      // ensure its section-body is hidden again (on each new section)
+      const body = document.getElementById(currentList).querySelector(".section-body");
+      if (body) {
+        body.style.display = "none";
+      }
     });
   });
 
   // 4) close modal
   closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
 
+  // 5) Initialize CRUD listeners once a farm is chosen
   function initListeners() {
     Object.keys(sectionsMap).forEach(sec => {
+      // references
       const fields   = sectionsMap[sec];
       const overview = document.getElementById(`${sec}-overview`);
       const form     = document.getElementById(`${sec}-form`);
       const dbRef    = ref(db, `${selectedFarm}/${sec}`);
 
+      // listen for changes in Firebase
       onValue(dbRef, snap => {
         overview.innerHTML = "";
 
-        // build overview list
+        // ← نجمع ثلاث متغيرات: expenses & purchasePrice & sellPrice
+        let totalExpenses = 0;
+        let totalPurchase = 0;
+        let totalSell     = 0;
+
         snap.forEach(child => {
-          const data = child.val(), key = child.key;
-          const item = document.createElement("div");
-          item.classList.add("overview-item");
-          overviewMap[sec].forEach(([_, f]) => {
-            const d = document.createElement("div");
-            d.textContent = data[f] || "";
-            item.appendChild(d);
+          const key  = child.key;
+          const data = child.val();
+
+          // create one “row” in overview
+          const row  = document.createElement("div");
+          row.classList.add("overview-item");
+          overview.appendChild(row);
+
+          // append each column in that row (حسب overviewMap)
+          overviewMap[sec].forEach(([colName, colKey]) => {
+            const cell = document.createElement("div");
+            cell.textContent = data[colKey] || "";
+            row.appendChild(cell);
+
+            // accumulate expenses
+            if (colKey === "expenses") {
+              const num = parseFloat(data[colKey]);
+              if (!isNaN(num)) totalExpenses += num;
+            }
+            // accumulate sell price
+            if (colKey === "sellPrice") {
+              const num = parseFloat(data[colKey]);
+              if (!isNaN(num)) totalSell += num;
+            }
           });
-          item.addEventListener("click", () => openModal(sec, key, data));
-          overview.appendChild(item);
+
+          // ← accumulate purchase price (بيانات الشراء) إن وجدت
+          const buyVal = parseFloat(data.purchasePrice);
+          if (!isNaN(buyVal)) {
+            totalPurchase += buyVal;
+          }
+
+          // click row → show detail modal
+          row.addEventListener("click", () => {
+            modalTitle.textContent = sec + " - " + (data.id || data.type || data.count);
+            modalForm.innerHTML    = "";
+            currentKey = key;
+
+            // build detail form dynamically
+            fields.forEach(field => {
+              const div = document.createElement("div");
+              div.classList.add("field-group");
+              const lbl = document.createElement("label");
+              lbl.setAttribute("for", `detail-${field}`);
+              lbl.textContent = fieldLabelMap[field] || field;
+              const inp = document.createElement("input");
+              inp.id   = `detail-${field}`;
+              inp.name = field;
+              if (field.includes("Date")) {
+                inp.type = "date";
+              }
+              inp.value = data[field] || "";
+              div.appendChild(lbl);
+              div.appendChild(inp);
+              modalForm.appendChild(div);
+            });
+
+            // buttons: update & delete
+            const updateBtn = document.createElement("button");
+            updateBtn.textContent = "تعديل";
+            updateBtn.type = "button";
+            updateBtn.addEventListener("click", () => {
+              const updates = {};
+              fields.forEach(field => {
+                const val = modalForm.querySelector(`[name="${field}"]`).value.trim();
+                updates[field] = val;
+              });
+              update(ref(db, `${selectedFarm}/${sec}/${currentKey}`), updates);
+              modal.classList.add("hidden");
+            });
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "حذف";
+            deleteBtn.type = "button";
+            deleteBtn.style.marginLeft = "1rem";
+            deleteBtn.addEventListener("click", () => {
+              remove(ref(db, `${selectedFarm}/${sec}/${currentKey}`));
+              modal.classList.add("hidden");
+            });
+
+            modalForm.appendChild(updateBtn);
+            modalForm.appendChild(deleteBtn);
+            modal.classList.remove("hidden");
+          });
         });
 
-        // total expenses
-        let total = 0;
-        snap.forEach(child => {
-          const v = parseFloat(child.val().expenses);
-          if (!isNaN(v)) total += v;
-        });
-        let totalDiv = overview.parentElement.querySelector(".overview-total");
-        if (!totalDiv) {
-          totalDiv = document.createElement("div");
-          totalDiv.classList.add("overview-total");
-          overview.parentElement.appendChild(totalDiv);
-        }
-        totalDiv.textContent = `مجموع المصاريف: ${total}`;
+        // ← بعد الانتهاء من اللوب، نضيف أربعة صفوف للإجماليات
+        // 1) Total Expenses
+        const totalCostRow = document.createElement("div");
+        totalCostRow.classList.add("overview-total");
+        totalCostRow.textContent = `مجموع المصاريف: ${totalExpenses || 0}`;
+        overview.appendChild(totalCostRow);
+
+        // 2) Total Purchase Price
+        const totalPurchaseRow = document.createElement("div");
+        totalPurchaseRow.classList.add("overview-total");
+        totalPurchaseRow.textContent = `مجموع الشراء: ${totalPurchase || 0}`;
+        overview.appendChild(totalPurchaseRow);
+
+        // 3) Total Selling Price
+        const totalSellRow = document.createElement("div");
+        totalSellRow.classList.add("overview-total");
+        totalSellRow.textContent = `مجموع البيع: ${totalSell || 0}`;
+        overview.appendChild(totalSellRow);
+
+        // 4) Net = Sell – (Purchase + Expenses)
+        const netRow = document.createElement("div");
+        netRow.classList.add("overview-total");
+        const netVal = (totalSell || 0) - ((totalPurchase || 0) + (totalExpenses || 0));
+        netRow.textContent = `الربح/الخسارة: ${netVal}`;
+        overview.appendChild(netRow);
       });
 
-      // form submit
+      // handle “Add New” form submission
       form.addEventListener("submit", e => {
         e.preventDefault();
-        const payload = {};
-        fields.forEach(f => payload[f] = form[f].value);
-        push(dbRef, payload);
+        const obj = {};
+        fields.forEach(field => {
+          const value = form.querySelector(`[name="${field}"]`).value.trim();
+          obj[field] = value;
+        });
+        push(dbRef, obj);
         form.reset();
       });
     });
-  }
 
-  function openModal(sec, key, data) {
-    currentKey = key;
-    modalTitle.textContent = `تفاصيل ${fieldLabelMap[sectionsMap[sec][0]] || sec}`;
-    modalForm.innerHTML = "";
-
-    sectionsMap[sec].forEach(f => {
-      const lbl = document.createElement("label");
-      lbl.textContent = fieldLabelMap[f] || f;
-      const inp = document.createElement("input");
-      inp.name  = f;
-      inp.value = data[f] || "";
-      if (f.toLowerCase().includes("date")) inp.type = "date";
-      modalForm.appendChild(lbl);
-      modalForm.appendChild(inp);
+    // 6) set up toggles for each section’s “.section-toggle”
+    document.querySelectorAll(".section-toggle").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const body = btn.nextElementSibling;
+        // toggle between “none” and “block”
+        if (body.style.display === "block") {
+          body.style.display = "none";
+        } else {
+          body.style.display = "block";
+        }
+      });
     });
-
-    // Save
-    const save = document.createElement("button");
-    save.textContent = "تحديث";
-    save.addEventListener("click", e => {
-      e.preventDefault();
-      const updates = {};
-      Array.from(modalForm.elements)
-        .filter(el => el.name)
-        .forEach(el => updates[el.name] = el.value);
-      update(ref(db, `${selectedFarm}/${currentList}/${currentKey}`), updates);
-      modal.classList.add("hidden");
-    });
-
-    // Delete
-    const del = document.createElement("button");
-    del.textContent = "حذف نهائي";
-    del.style.background = "#c62828";
-    del.addEventListener("click", e => {
-      e.preventDefault();
-      remove(ref(db, `${selectedFarm}/${currentList}/${currentKey}`));
-      modal.classList.add("hidden");
-    });
-
-    modalForm.appendChild(save);
-    modalForm.appendChild(del);
-    modal.classList.remove("hidden");
   }
 });
+
 
 
 
