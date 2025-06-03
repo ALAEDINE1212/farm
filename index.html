@@ -12,19 +12,16 @@
 </head>
 <body>
 
-  <!-- زرّ الهامبرغر لفتح/إغلاق الشريط الجانبي على الموبايل -->
-  <button id="menu-toggle" class="menu-toggle" aria-label="عرض القائمة">
-    &#9776;
-  </button>
-
-  <!-- Farm selector -->
+  <!-- صفحة اختيار المزرعة -->
   <div id="farm-select" class="farm-select">
     <div class="farm-card" data-farm="sefrou">مزرعة صفرو</div>
     <div class="farm-card" data-farm="kamouni">مزرعة كاموني</div>
   </div>
 
-  <!-- Sidebar menu -->
+  <!-- الشريط الجانبي (Sidebar) -->
   <aside id="sidebar" class="sidebar">
+    <!-- زر إغلاق القائمة داخل الشريط الجانبي -->
+    <button id="menu-close" class="menu-close" aria-label="إغلاق القائمة">×</button>
     <nav>
       <a href="#" data-section="ewes">أغنام إناث</a>
       <a href="#" data-section="rams">أغنام ذكور</a>
@@ -37,14 +34,12 @@
     </nav>
   </aside>
 
-  <!-- Main content -->
+  <!-- المحتوى الرئيس -->
   <main id="main-content" class="main-content">
 
     <!-- 1) Ewes (أغنام إناث) -->
     <section id="ewes" class="section">
-      <!-- زرّ إخفاء/إظهار النموذج -->
       <button class="section-toggle">إضافة أغنام إناث</button>
-      <!-- النموذج مخفي افتراضيًا -->
       <div class="section-body">
         <form id="ewes-form" class="item-form">
           <div class="field-group">
@@ -78,13 +73,11 @@
           <button type="submit">أضف أنثى</button>
         </form>
       </div>
-      <!-- قائمة العرض (overview) ظاهرة دائمًا -->
       <div class="overview-wrap">
         <div class="overview-header">رقم</div>
         <div class="overview-header">مصاريف</div>
         <div class="overview-header">ثمن بيع</div>
         <div id="ewes-overview" class="overview-list"></div>
-        <!-- الإجماليات تُضاف ديناميكيًا عبر script.js -->
       </div>
     </section>
 
@@ -354,7 +347,7 @@
 
   </main>
 
-  <!-- Detail/Edit Modal -->
+  <!-- نافذة تعديل/حذف تفصيلي -->
   <div id="detail-modal" class="modal hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
