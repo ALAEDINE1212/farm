@@ -12,15 +12,20 @@
 </head>
 <body>
 
-  <!-- صفحة اختيار المزرعة -->
+  <!-- 1) صفحة اختيار المزرعة (ظاهرة أولًا) -->
   <div id="farm-select" class="farm-select">
     <div class="farm-card" data-farm="sefrou">مزرعة صفرو</div>
     <div class="farm-card" data-farm="kamouni">مزرعة كاموني</div>
   </div>
 
-  <!-- الشريط الجانبي (Sidebar) -->
+  <!-- 2) زرّ الهامبرغر (☰) الثابت في أعلى اليمين ليظهر دائمًا -->
+  <button id="menu-toggle" class="menu-toggle" aria-label="عرض القائمة">
+    &#9776;
+  </button>
+
+  <!-- 3) الشريط الجانبي (Sidebar) -->
   <aside id="sidebar" class="sidebar">
-    <!-- زر إغلاق القائمة داخل الشريط الجانبي -->
+    <!-- زرّ إغلاق / تصغير القائمة داخليًا (×) -->
     <button id="menu-close" class="menu-close" aria-label="إغلاق القائمة">×</button>
     <nav>
       <a href="#" data-section="ewes">أغنام إناث</a>
@@ -34,8 +39,9 @@
     </nav>
   </aside>
 
-  <!-- المحتوى الرئيس -->
+  <!-- 4) المحتوى الرئيس -->
   <main id="main-content" class="main-content">
+    <!-- تبقى الأقسام مخفيّة افتراضيًا، وسيظهر القسم النشط فقط -->
 
     <!-- 1) Ewes (أغنام إناث) -->
     <section id="ewes" class="section">
@@ -360,3 +366,4 @@
   <script type="module" src="script.js"></script>
 </body>
 </html>
+

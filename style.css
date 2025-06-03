@@ -22,7 +22,23 @@ body {
   overflow-x: hidden;
 }
 
-/* زر إغلاق القائمة داخل الشريط الجانبي */
+/* زر “☰” الثابت في أعلى اليمين */
+.menu-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  z-index: 30;
+  display: none; /* يظهر فقط على الهواتف */
+  cursor: pointer;
+}
+
+/* زر “×” داخل الشريط الجانبي */
 .menu-close {
   position: absolute;
   top: 0.75rem;
@@ -65,19 +81,25 @@ body {
   transform: scale(1.05);
 }
 
-/* الشريط الجانبي (Sidebar) */
+/* الشريط الجانبي */
 .sidebar {
   position: fixed;
   top: 0; right: 0;
-  width: 200px;
+  width: 60px; /*    عرض ضيق افتراضيًا على الهواتف    */
   height: 100vh;
   background: var(--surface);
   box-shadow: -2px 0 6px rgba(0,0,0,0.5);
-  padding-top: 2rem; /* مساحة فوقية لرؤية زر “×” */
-  display: none; /* يظهر فقط بعد اختيار المزرعة */
+  padding-top: 2rem; /* مساحة علوية ليبقى زر “×” ظاهرًا */
   z-index: 20;
-  transition: transform 0.3s ease;
+  transition: width 0.3s ease;
+  display: none; /* يظهر بعد اختيار المزرعة */
 }
+
+/* عند توسعة الشريط الجانبي (class="open") */
+.sidebar.open {
+  width: 200px;
+}
+
 .sidebar nav {
   display: flex;
   flex-direction: column;
@@ -91,6 +113,7 @@ body {
   font-weight: 600;
   transition: background .2s;
   border-radius: 4px;
+  white-space: nowrap;
 }
 .sidebar a:hover,
 .sidebar a.active {
@@ -98,13 +121,13 @@ body {
   color: #fff;
 }
 
-/* المحتوى الرئيس */
+/* المحتوى الرئيسي */
 .main-content {
-  margin-right: 200px; /* مساحة لوجود الشريط الجانبي على الكمبيوتر */
+  margin-right: 60px; /* يساوي العرض الضيق للشريط الجانبي */
   padding: 1rem;
 }
 
-/* الأقسام (مخفيّة افتراضيًا) */
+/* الأقسام */
 .section {
   display: none;
   margin-bottom: 2rem;
@@ -113,7 +136,7 @@ body {
   display: block;
 }
 
-/* زر إظهار/إخفاء النموذج */
+/* زرّ إظهار/إخفاء نموذج القسم */
 .section-toggle {
   display: block;
   width: 100%;
@@ -133,7 +156,7 @@ body {
   background: var(--primary-light);
 }
 
-/* حاوية النموذج مخفيّة افتراضيًا */
+/* حاوية نموذج الإضافة مخفيّة افتراضيًا */
 .section-body {
   display: none;
   margin-top: 1rem;
@@ -160,7 +183,7 @@ body {
   width: 100%;
 }
 
-/* نموذج الإضافة */
+/* تصميم نموذج الإضافة */
 .item-form {
   display: flex;
   flex-wrap: wrap;
@@ -183,7 +206,7 @@ body {
   background: var(--primary-light);
 }
 
-/* قائمة العرض (overview) */
+/* جدول العرض (overview) */
 .overview-wrap {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -191,7 +214,7 @@ body {
   border-radius: 8px;
   overflow: hidden;
   margin-top: 1rem;
-  overflow-x: auto; /* للسماح بالتمرير الأفقي إذا ضاق العرض */
+  overflow-x: auto; /* يسمح بالتمرير الأفقي إن ضاق العرض */
 }
 .overview-header {
   background: var(--primary);
@@ -225,7 +248,7 @@ body {
   background: var(--primary-light);
 }
 
-/* الإجماليات */
+/* صفوف الإجماليات */
 .overview-total {
   grid-column: 1 / -1;
   background: var(--dark);
@@ -282,38 +305,34 @@ body {
   cursor: pointer;
 }
 
-/* ===== تَعْدِيلات Responsive للهواتف ===== */
+/* ===== تَعْدِيلات Responsive للهواتف (≤768px) ===== */
 @media (max-width: 768px) {
-  /* إظهار زر “×” داخل القائمة */
-  .menu-close {
+  /* إظهار زرّ “☰” دائمًا على الهواتف */
+  .menu-toggle {
     display: block;
   }
 
-  /* اجعل الشريط الجانبي off-canvas (مخفي تراكبيًا) */
+  /* الشريط الجانبي يكون ضيقًا (60px) افتراضيًا، ويتوسّع (200px) عند الصنف .open */
   .sidebar {
-    transform: translateX(100%);
-    width: 60%;
-    padding-top: 2rem; /* مساحة لرؤية زر “×” */
+    display: block; /* يظل ظاهرًا لكن ضيق */
+    width: 60px;
   }
   .sidebar.open {
-    transform: translateX(0);
+    width: 200px;
   }
 
-  /* إزالة الهامش من main-content */
+  /* المحتوى الرئيسي يشغل المساحة المتبقية */
   .main-content {
-    margin-right: 0;
+    margin-right: 60px; /* نفس عرض sidebar الضيق */
     padding: 1rem 0.5rem;
   }
 
-  /* حقل الإدخال عمودي بالكامل */
+  /* جعل نموذج الإدخال عمودي بالكامل */
   .item-form {
     flex-direction: column;
   }
 
-  /*
-    احتفظ بثلاثة أعمدة في قائمة العرض حتى على الهواتف
-    مع overflow-x: auto للسماح بالتمرير الأفقي
-  */
+  /* جدول العرض بثلاثة أعمدة دائمًا مع تمرير أفقي */
   .overview-wrap {
     grid-template-columns: repeat(3, 1fr);
     overflow-x: auto;
@@ -322,11 +341,12 @@ body {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  /* تصغير الخطّ في رؤوس الأعمدة قليلاً */
+  /* تصغير الخطّ قليلاً في رؤوس الأعمدة */
   .overview-header {
     font-size: 0.85rem;
     padding: 0.5rem;
   }
 }
+
 
 
