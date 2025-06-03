@@ -24,7 +24,6 @@ const app       = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db        = getDatabase(app);
 
-// ← نضيف "purchasePrice" لأقسام ewes و cowFemales
 const sectionsMap = {
   ewes:      ["id","status","purchasePrice","medDate","expenses","sellDate","sellPrice"],
   rams:      ["id","purchaseDate","purchasePrice","status","expenses","sellDate","sellPrice"],
@@ -70,6 +69,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const farmSelect = document.getElementById("farm-select");
   const sidebar    = document.getElementById("sidebar");
   const switchBtn  = document.getElementById("switch-farm");
+  const menuToggle = document.getElementById("menu-toggle");
   const modal      = document.getElementById("detail-modal");
   const modalForm  = document.getElementById("detail-form");
   const modalTitle = document.getElementById("detail-title");
@@ -119,13 +119,20 @@ window.addEventListener("DOMContentLoaded", () => {
       if (body) {
         body.style.display = "none";
       }
+      // عند اختيار قسم جديد، خفف الـ overlay إن وجد
+      sidebar.classList.remove("open");
     });
   });
 
-  // 4) close modal
+  // 4) زرّ الهامبرغر لفتح/إغلاق الشريط الجانبي على الهواتف
+  menuToggle.addEventListener("click", () => {
+    sidebar.classList.toggle("open");
+  });
+
+  // 5) close modal
   closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
 
-  // 5) Initialize CRUD listeners once a farm is chosen
+  // 6) Initialize CRUD listeners once a farm is chosen
   function initListeners() {
     Object.keys(sectionsMap).forEach(sec => {
       // references
@@ -229,7 +236,7 @@ window.addEventListener("DOMContentLoaded", () => {
           });
         });
 
-        // after the loop, append four summary rows:
+        // بعد انتهاء اللوب، إضافة أربعة صفوف الإحصائيات:
         // 1) Total Expenses
         const totalCostRow = document.createElement("div");
         totalCostRow.classList.add("overview-total");
@@ -269,11 +276,10 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // 6) set up toggles for each button
+    // 7) set up toggles لعرض/إخفاء “section-body”
     document.querySelectorAll(".section-toggle").forEach(btn => {
       btn.addEventListener("click", () => {
         const body = btn.nextElementSibling;
-        // فقط هذا العنصر المخفي (div.section-body) يتم إظهاره/إخفاؤه
         if (body.style.display === "block") {
           body.style.display = "none";
         } else {
@@ -283,6 +289,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
