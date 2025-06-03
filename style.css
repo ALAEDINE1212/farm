@@ -8,51 +8,18 @@
   --text-secondary:  #888;
 }
 
+/* ضبط عام */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 body {
   font-family: 'Cairo', sans-serif;
   background: var(--bg);
   color: var(--text);
   direction: rtl;
   overflow-x: hidden;
-}
-
-/* زر “☰” الثابت في أعلى اليمين */
-.menu-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  font-size: 1.5rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 4px;
-  z-index: 30;
-  display: none; /* يظهر فقط على الهواتف */
-  cursor: pointer;
-}
-
-/* زر “×” داخل الشريط الجانبي */
-.menu-close {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--text-secondary);
-  cursor: pointer;
-  z-index: 25;
-  transition: color 0.2s ease;
-}
-.menu-close:hover {
-  color: #fff;
 }
 
 /* صفحة اختيار المزرعة */
@@ -81,23 +48,68 @@ body {
   transform: scale(1.05);
 }
 
+/* زرّ الهامبرغر (☰) */
+.menu-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  z-index: 30;
+  display: none; /* نظهره على الهواتف فقط */
+  cursor: pointer;
+}
+
+/* طبقة الظل (Overlay) */
+.overlay {
+  display: none; /* تظهر عند فتح الشريط الجانبي */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 25;
+}
+
 /* الشريط الجانبي */
 .sidebar {
   position: fixed;
   top: 0; right: 0;
-  width: 60px; /*    عرض ضيق افتراضيًا على الهواتف    */
+  width: 70%; /* نستخدم 70% عرض الشاشة للشريط عند الفتح */
+  max-width: 300px;
   height: 100vh;
   background: var(--surface);
   box-shadow: -2px 0 6px rgba(0,0,0,0.5);
-  padding-top: 2rem; /* مساحة علوية ليبقى زر “×” ظاهرًا */
-  z-index: 20;
-  transition: width 0.3s ease;
-  display: none; /* يظهر بعد اختيار المزرعة */
+  transform: translateX(100%); /* مخفيًّا خارج الشاشة إلى اليمين */
+  transition: transform 0.3s ease;
+  z-index: 26;
+  padding-top: 1.5rem;
 }
 
-/* عند توسعة الشريط الجانبي (class="open") */
+/* عندما نضيف الصنف .open إلى .sidebar نُظهره */
 .sidebar.open {
-  width: 200px;
+  transform: translateX(0);
+}
+
+/* زرّ إغلاق الشريط الجانبي */
+.menu-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  z-index: 27;
+  transition: color 0.2s ease;
+}
+.menu-close:hover {
+  color: #fff;
 }
 
 .sidebar nav {
@@ -108,12 +120,11 @@ body {
 }
 .sidebar a {
   color: var(--text);
-  padding: .5rem 1rem;
+  padding: .75rem 1rem;
   text-decoration: none;
   font-weight: 600;
   transition: background .2s;
   border-radius: 4px;
-  white-space: nowrap;
 }
 .sidebar a:hover,
 .sidebar a.active {
@@ -123,7 +134,7 @@ body {
 
 /* المحتوى الرئيسي */
 .main-content {
-  margin-right: 60px; /* يساوي العرض الضيق للشريط الجانبي */
+  margin-right: 0; /* على البداية، لا نترك فراغًا (السيّد الصغير) */
   padding: 1rem;
 }
 
@@ -214,7 +225,7 @@ body {
   border-radius: 8px;
   overflow: hidden;
   margin-top: 1rem;
-  overflow-x: auto; /* يسمح بالتمرير الأفقي إن ضاق العرض */
+  overflow-x: auto; /* لتمرير أفقي إن لزم */
 }
 .overview-header {
   background: var(--primary);
@@ -267,7 +278,7 @@ body {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  z-index: 50;
+  z-index: 28;
 }
 .modal-backdrop {
   position: absolute;
@@ -305,34 +316,30 @@ body {
   cursor: pointer;
 }
 
-/* ===== تَعْدِيلات Responsive للهواتف (≤768px) ===== */
+/* ===== تعديلات Responsive للهواتف (≤768px) ===== */
 @media (max-width: 768px) {
-  /* إظهار زرّ “☰” دائمًا على الهواتف */
+  /* إظهار زرّ “☰” */
   .menu-toggle {
     display: block;
   }
 
-  /* الشريط الجانبي يكون ضيقًا (60px) افتراضيًا، ويتوسّع (200px) عند الصنف .open */
+  /* الشريط الجانبي يتحرك خارج الشاشة (translateX(100%))، وسيظهر إذا أضفنا صنف .open */
   .sidebar {
-    display: block; /* يظل ظاهرًا لكن ضيق */
-    width: 60px;
-  }
-  .sidebar.open {
-    width: 200px;
+    width: 70%;
+    max-width: 300px;
   }
 
-  /* المحتوى الرئيسي يشغل المساحة المتبقية */
-  .main-content {
-    margin-right: 60px; /* نفس عرض sidebar الضيق */
-    padding: 1rem 0.5rem;
+  /* عندما يكون الشريط الجانبي ظاهرًا (class="open")، نظهر الظلّ ونمنع التمرير خلفه */
+  .sidebar.open ~ .overlay {
+    display: block;
   }
 
-  /* جعل نموذج الإدخال عمودي بالكامل */
-  .item-form {
-    flex-direction: column;
+  /* تعويض المحتوى الرئيسي عندما يكون الشريط الجانبي ظاهرًا */
+  .sidebar.open ~ .main-content {
+    overflow: hidden;
   }
 
-  /* جدول العرض بثلاثة أعمدة دائمًا مع تمرير أفقي */
+  /* تنسيق جدول العرض (يبقى 3 أعمدة مع تمرير أفقي) */
   .overview-wrap {
     grid-template-columns: repeat(3, 1fr);
     overflow-x: auto;
@@ -341,12 +348,13 @@ body {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  /* تصغير الخطّ قليلاً في رؤوس الأعمدة */
+  /* تصغير الخطّ في رؤوس الجدول قليلاً */
   .overview-header {
     font-size: 0.85rem;
     padding: 0.5rem;
   }
 }
+
 
 
 
