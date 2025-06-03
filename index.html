@@ -18,13 +18,10 @@
     <div class="farm-card" data-farm="kamouni">مزرعة كاموني</div>
   </div>
 
-  <!-- 2) زرّ الهامبرغر (☰) لإظهار الشريط الجانبي على الهواتف -->
+  <!-- 2) زرّ الهامبرغر (☰) لإظهار القائمة الجانبيّة على الهواتف -->
   <button id="menu-toggle" class="menu-toggle" aria-label="عرض القائمة">☰</button>
 
-  <!-- 3) طبقة الظل التي تظهر مع الشريط الجانبي -->
-  <div id="overlay" class="overlay"></div>
-
-  <!-- 4) الشريط الجانبي (Sidebar) -->
+  <!-- 3) الشريط الجانبيّ (Sidebar) -->
   <aside id="sidebar" class="sidebar">
     <button id="menu-close" class="menu-close" aria-label="إغلاق القائمة">×</button>
     <nav>
@@ -39,9 +36,9 @@
     </nav>
   </aside>
 
-  <!-- 5) المحتوى الرئيسي -->
+  <!-- 4) المحتوى الرئيسي -->
   <main id="main-content" class="main-content">
-    <!-- 5.1) Ewes (أغنام إناث) -->
+    <!-- 4.1) Ewes (أغنام إناث) -->
     <section id="ewes" class="section">
       <button class="section-toggle">إضافة أغنام إناث</button>
       <div class="section-body">
@@ -85,7 +82,7 @@
       </div>
     </section>
 
-    <!-- 5.2) Rams (أغنام ذكور) -->
+    <!-- 4.2) Rams (أغنام ذكور) -->
     <section id="rams" class="section">
       <button class="section-toggle">إضافة أغنام ذكور</button>
       <div class="section-body">
@@ -129,7 +126,7 @@
       </div>
     </section>
 
-    <!-- 5.3) Lambs (أولاد أغنام) -->
+    <!-- 4.3) Lambs (أولاد أغنام) -->
     <section id="lambs" class="section">
       <button class="section-toggle">إضافة أولاد أغنام</button>
       <div class="section-body">
@@ -173,7 +170,7 @@
       </div>
     </section>
 
-    <!-- 5.4) Chickens (الدجاج) -->
+    <!-- 4.4) Chickens (الدجاج) -->
     <section id="chickens" class="section">
       <button class="section-toggle">إضافة الدجاج</button>
       <div class="section-body">
@@ -225,7 +222,7 @@
       </div>
     </section>
 
-    <!-- 5.5) Olives (أشجار الزيتون) -->
+    <!-- 4.5) Olives (أشجار الزيتون) -->
     <section id="olives" class="section">
       <button class="section-toggle">إضافة أشجار الزيتون</button>
       <div class="section-body">
@@ -261,7 +258,7 @@
       </div>
     </section>
 
-    <!-- 5.6) Cow Females (بقرة إناث) -->
+    <!-- 4.6) Cow Females (بقرة إناث) -->
     <section id="cowFemales" class="section">
       <button class="section-toggle">إضافة بقرة إناث</button>
       <div class="section-body">
@@ -305,7 +302,7 @@
       </div>
     </section>
 
-    <!-- 5.7) Cow Males (بقرة ذكور) -->
+    <!-- 4.7) Cow Males (بقرة ذكور) -->
     <section id="cowMales" class="section">
       <button class="section-toggle">إضافة بقرة ذكور</button>
       <div class="section-body">
@@ -335,7 +332,7 @@
             <input id="cowMales-sellDate" name="sellDate" type="date" />
           </div>
           <div class="field-group">
-            <label for="cowMales-sellPrice">ثمن البيع</label>
+            <label for "cowMales-sellPrice">ثمن البيع</label>
             <input id="cowMales-sellPrice" name="sellPrice" />
           </div>
           <button type="submit">أضف بقرة ذكور</button>
@@ -348,10 +345,9 @@
         <div id="cowMales-overview" class="overview-list"></div>
       </div>
     </section>
-
   </main>
 
-  <!-- 6) نافذة تعديل/حذف تفصيلي -->
+  <!-- 5) نافذة تعديل/حذف تفصيلي -->
   <div id="detail-modal" class="modal hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
@@ -364,5 +360,6 @@
   <script type="module" src="script.js"></script>
 </body>
 </html>
+
 
 

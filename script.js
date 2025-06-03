@@ -9,7 +9,7 @@ import {
   remove
 } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js';
 
-// ← بيانات Firebase الخاصة بك ↓
+// ← بيانات Firebase الخاصّة بك ↓
 const firebaseConfig = {
   apiKey: "AIzaSyBgxLUjJQKbMh9xTBbnqOUitVuJaOo72ro",
   authDomain: "farm-b8de3.firebaseapp.com",
@@ -71,13 +71,12 @@ window.addEventListener("DOMContentLoaded", () => {
   const switchBtn   = document.getElementById("switch-farm");
   const menuToggle  = document.getElementById("menu-toggle");
   const menuClose   = document.getElementById("menu-close");
-  const overlay     = document.getElementById("overlay");
   const modal       = document.getElementById("detail-modal");
   const modalForm   = document.getElementById("detail-form");
   const modalTitle  = document.getElementById("detail-title");
   const closeBtn    = document.getElementById("detail-close");
 
-  // ضبط العنصر input[type="date"] لكل نموذج
+  // 1) ضبط حقول التاريخ في النماذج
   document.querySelectorAll(".item-form input[type='date']").forEach(inp => {
     const label = fieldLabelMap[inp.name] || "";
     inp.setAttribute("aria-label", label);
@@ -85,41 +84,35 @@ window.addEventListener("DOMContentLoaded", () => {
     inp.placeholder = label;
   });
 
-  // 1) عند اختيار المزرعة:
+  // 2) عند اختيار بطاقة إحدى المزارع:
   document.querySelectorAll(".farm-card").forEach(c => {
     c.addEventListener("click", () => {
       selectedFarm = c.dataset.farm;
       farmSelect.style.display = "none";
 
-      // نظهر زرّ ☰ في أعلى اليمين (menu-toggle) ونفعّل الشريط الجانبي ليكون مخفيًّا (transform: translateX(100%))
+      // نظهر زرّ ☰، ونبدأ الشريط الجانبي مخفيًّا
       menuToggle.style.display = "block";
       sidebar.classList.remove("open");
-      overlay.style.display = "none";
 
       initListeners();
     });
   });
 
-  // 2) عند الضغط على زرّ “☰” (menu-toggle):
-  //    نظهر الشريط الجانبي (نضيف الصنف open) ونبيّن طبقة الظلّ (overlay)
+  // 3) الضغط على زرّ ☰ لفتح/إغلاق القائمة الجانبيّة:
   menuToggle.addEventListener("click", () => {
-    sidebar.classList.add("open");
-    overlay.style.display = "block";
+    if (sidebar.classList.contains("open")) {
+      sidebar.classList.remove("open");
+    } else {
+      sidebar.classList.add("open");
+    }
   });
 
-  // 3) عند الضغط على زرّ “×” داخل الشريط الجانبي:
+  // 4) الضغط على زرّ × داخل القائمة لإغلاقها
   menuClose.addEventListener("click", () => {
     sidebar.classList.remove("open");
-    overlay.style.display = "none";
   });
 
-  // 4) عند الضغط على طبقة الظل (overlay)، نُغلق الشريط الجانبي
-  overlay.addEventListener("click", () => {
-    sidebar.classList.remove("open");
-    overlay.style.display = "none";
-  });
-
-  // 5) الضغط على رابط قسم داخل الشريط الجانبي:
+  // 5) الضغط على أي رابط قسم داخل القائمة الجانبيّة
   document.querySelectorAll("#sidebar a[data-section]").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
@@ -137,28 +130,25 @@ window.addEventListener("DOMContentLoaded", () => {
       const body = document.getElementById(currentList).querySelector(".section-body");
       if (body) body.style.display = "none";
 
-      // نُغلق الشريط الجانبي ونُخفي الظلّ
+      // إغلاق القائمة الجانبيّة
       sidebar.classList.remove("open");
-      overlay.style.display = "none";
     });
   });
 
-  // 6) الضغط على “تغيير المزرعة”:
+  // 6) الضغط على “تغيير المزرعة” يعيدنا إلى صفحة اختيار المزرعة
   switchBtn.addEventListener("click", e => {
     e.preventDefault();
     selectedFarm = null;
     farmSelect.style.display = "flex";
 
-    // نُعيد إخفاء الشريط الجانبي والظلّ وزرّ ☰
+    // نظهر صفحة الاختيار، نخفي القائمة وعلامات الأقسام
     sidebar.classList.remove("open");
-    overlay.style.display = "none";
     menuToggle.style.display = "none";
-
     document.querySelectorAll(".section").forEach(s => s.style.display = "none");
     document.querySelectorAll("#sidebar a").forEach(a => a.classList.remove("active"));
   });
 
-  // 7) تهيئة الاستماع (CRUD) بعد اختيار المزرعة
+  // 7) تهيئة الاستماع (CRUD) لجميع الأقسام بعد اختيار المزرعة
   function initListeners() {
     Object.keys(sectionsMap).forEach(sec => {
       const fields   = sectionsMap[sec];
@@ -166,7 +156,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const form     = document.getElementById(`${sec}-form`);
       const dbRef    = ref(db, `${selectedFarm}/${sec}`);
 
-      // الاستماع لتغيرات Firebase
+      // استمع لتغييرات قاعدة البيانات (Firebase RTDB)
       onValue(dbRef, snap => {
         overview.innerHTML = "";
 
@@ -178,12 +168,12 @@ window.addEventListener("DOMContentLoaded", () => {
           const key  = child.key;
           const data = child.val();
 
-          // إنشاء صفّ جديد في قائمة العرض
+          // إنشاء صف جديد في قائمة العرض
           const row  = document.createElement("div");
           row.classList.add("overview-item");
           overview.appendChild(row);
 
-          // إدراج الأعمدة الثلاث حسب overviewMap
+          // كل عمود حسب overviewMap
           overviewMap[sec].forEach(([colName, colKey]) => {
             const cell = document.createElement("div");
             cell.textContent = data[colKey] || "";
@@ -202,12 +192,13 @@ window.addEventListener("DOMContentLoaded", () => {
           const buyVal = parseFloat(data.purchasePrice);
           if (!isNaN(buyVal)) totalPurchase += buyVal;
 
-          // عند الضغط على الصفّ، نفتح نافذة التعديل/الحذف
+          // عند الضغط على الصف نفسه، افتح نموذج التعديل/الحذف
           row.addEventListener("click", () => {
             modalTitle.textContent = sec + " - " + (data.id || data.type || data.count);
             modalForm.innerHTML = "";
             currentKey = key;
 
+            // بناء نموذج التفاصيل ديناميكيًا
             fields.forEach(field => {
               const div = document.createElement("div");
               div.classList.add("field-group");
@@ -224,7 +215,7 @@ window.addEventListener("DOMContentLoaded", () => {
               modalForm.appendChild(div);
             });
 
-            // زر التعديل
+            // زرّ تعديل
             const updateBtn = document.createElement("button");
             updateBtn.textContent = "تعديل";
             updateBtn.type = "button";
@@ -238,7 +229,7 @@ window.addEventListener("DOMContentLoaded", () => {
               modal.classList.add("hidden");
             });
 
-            // زر الحذف
+            // زرّ حذف
             const deleteBtn = document.createElement("button");
             deleteBtn.textContent = "حذف";
             deleteBtn.type = "button";
@@ -254,7 +245,7 @@ window.addEventListener("DOMContentLoaded", () => {
           });
         });
 
-        // إضافة صفوف الإحصائيات في الأسفل
+        // إضافة صفوف الإحصائيات (المصاريف، الشراء، البيع، الصافي)
         const totalCostRow = document.createElement("div");
         totalCostRow.classList.add("overview-total");
         totalCostRow.textContent = `مجموع المصاريف: ${totalExpenses || 0}`;
@@ -277,7 +268,7 @@ window.addEventListener("DOMContentLoaded", () => {
         overview.appendChild(netRow);
       });
 
-      // التعامل مع نماذج الإضافة
+      // عند إرسال نموذج الإضافة
       form.addEventListener("submit", e => {
         e.preventDefault();
         const obj = {};
@@ -302,7 +293,7 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // 9) زرّ إغلاق النافذة المنبثقة
+    // 9) إغلاق نافذة التعديل عند الضغط على زرّ ×
     closeBtn.addEventListener("click", () => {
       modal.classList.add("hidden");
     });

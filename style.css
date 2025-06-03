@@ -8,7 +8,7 @@
   --text-secondary:  #888;
 }
 
-/* ضبط عام */
+/* إعدادات عامة */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -60,42 +60,31 @@ body {
   padding: 0.5rem 0.75rem;
   border-radius: 4px;
   z-index: 30;
-  display: none; /* نظهره على الهواتف فقط */
+  display: none; /* يظهر فقط على الهواتف (≤768px) */
   cursor: pointer;
 }
 
-/* طبقة الظل (Overlay) */
-.overlay {
-  display: none; /* تظهر عند فتح الشريط الجانبي */
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: 25;
-}
-
-/* الشريط الجانبي */
+/* الشريط الجانبي (Sidebar) */
 .sidebar {
   position: fixed;
   top: 0; right: 0;
-  width: 70%; /* نستخدم 70% عرض الشاشة للشريط عند الفتح */
-  max-width: 300px;
+  width: 70%;           /* يأتي بعرض 70% من شاشة الهاتف */
+  max-width: 300px;     /* لكن لا يتجاوز 300px على الأجهزة الأكبر */
   height: 100vh;
   background: var(--surface);
   box-shadow: -2px 0 6px rgba(0,0,0,0.5);
-  transform: translateX(100%); /* مخفيًّا خارج الشاشة إلى اليمين */
+  transform: translateX(100%); /* مخفيّ خارج الشاشة أولًا */
   transition: transform 0.3s ease;
   z-index: 26;
   padding-top: 1.5rem;
 }
 
-/* عندما نضيف الصنف .open إلى .sidebar نُظهره */
+/* عندما نضيف الصنف .open إلى .sidebar، نظهره */
 .sidebar.open {
   transform: translateX(0);
 }
 
-/* زرّ إغلاق الشريط الجانبي */
+/* زرّ إغلاق الشريط الجانبيّ (×) */
 .menu-close {
   position: absolute;
   top: 0.75rem;
@@ -125,6 +114,7 @@ body {
   font-weight: 600;
   transition: background .2s;
   border-radius: 4px;
+  white-space: nowrap;
 }
 .sidebar a:hover,
 .sidebar a.active {
@@ -134,11 +124,12 @@ body {
 
 /* المحتوى الرئيسي */
 .main-content {
-  margin-right: 0; /* على البداية، لا نترك فراغًا (السيّد الصغير) */
+  margin-right: 0;  /* نقوم بتعديل هذه القيمة عند فتح / إغلاق القائمة */
   padding: 1rem;
+  transition: margin-right 0.3s ease;
 }
 
-/* الأقسام */
+/* الأقسام مخفيّة افتراضيًا */
 .section {
   display: none;
   margin-bottom: 2rem;
@@ -173,7 +164,7 @@ body {
   margin-top: 1rem;
 }
 
-/* حقول النموذج */
+/* تنسيق حقول النموذج */
 .field-group {
   display: flex;
   flex-direction: column;
@@ -217,7 +208,7 @@ body {
   background: var(--primary-light);
 }
 
-/* جدول العرض (overview) */
+/* جدول العرض (Overview) */
 .overview-wrap {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -225,7 +216,7 @@ body {
   border-radius: 8px;
   overflow: hidden;
   margin-top: 1rem;
-  overflow-x: auto; /* لتمرير أفقي إن لزم */
+  overflow-x: auto; /* إذا ضاق العرض يتم التمرير أفقيًّا */
 }
 .overview-header {
   background: var(--primary);
@@ -259,7 +250,7 @@ body {
   background: var(--primary-light);
 }
 
-/* صفوف الإجماليات */
+/* صفوف الإجماليات في الأسفل */
 .overview-total {
   grid-column: 1 / -1;
   background: var(--dark);
@@ -318,42 +309,17 @@ body {
 
 /* ===== تعديلات Responsive للهواتف (≤768px) ===== */
 @media (max-width: 768px) {
-  /* إظهار زرّ “☰” */
+  /* إظهار زرّ ☰ */
   .menu-toggle {
     display: block;
   }
 
-  /* الشريط الجانبي يتحرك خارج الشاشة (translateX(100%))، وسيظهر إذا أضفنا صنف .open */
-  .sidebar {
-    width: 70%;
-    max-width: 300px;
-  }
-
-  /* عندما يكون الشريط الجانبي ظاهرًا (class="open")، نظهر الظلّ ونمنع التمرير خلفه */
-  .sidebar.open ~ .overlay {
-    display: block;
-  }
-
-  /* تعويض المحتوى الرئيسي عندما يكون الشريط الجانبي ظاهرًا */
+  /* عندما تكون القائمة مفتوحة (صنف .open) نُضيف هوامش للمحتوى */
   .sidebar.open ~ .main-content {
-    overflow: hidden;
-  }
-
-  /* تنسيق جدول العرض (يبقى 3 أعمدة مع تمرير أفقي) */
-  .overview-wrap {
-    grid-template-columns: repeat(3, 1fr);
-    overflow-x: auto;
-  }
-  .overview-item {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  /* تصغير الخطّ في رؤوس الجدول قليلاً */
-  .overview-header {
-    font-size: 0.85rem;
-    padding: 0.5rem;
+    margin-right: 70%; /* المحتوى يُدفع لليسار بنسبة عرض القائمة (70%) */
   }
 }
+
 
 
 
