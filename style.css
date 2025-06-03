@@ -34,7 +34,7 @@ body {
   padding: 0.5rem 0.75rem;
   border-radius: 4px;
   z-index: 30;
-  display: none; /* سيصبح ظاهرًا على الشاشات الصغيرة فقط */
+  display: none; /* يظهر فقط على الشاشات الصغيرة */
   cursor: pointer;
 }
 
@@ -190,6 +190,8 @@ body {
   border-radius: 8px;
   overflow: hidden;
   margin-top: 1rem;
+  /* أضفنا تمرير أفقي إن لزم الأمر */
+  overflow-x: auto;
 }
 .overview-header {
   background: var(--primary);
@@ -197,10 +199,11 @@ body {
   padding: .75rem;
   font-weight: 600;
   text-align: center;
+  white-space: nowrap;
 }
 .overview-list {
   grid-column: 1 / -1;
-  display: block; /* يعرض العناصر بشكل عمودي */
+  display: block; /* يعرض العناصر بشكل عمودي ضمن نفس الأعمدة */
 }
 .overview-item {
   display: grid;
@@ -212,6 +215,7 @@ body {
 }
 .overview-item > div {
   text-align: center;
+  white-space: nowrap;
 }
 .overview-item:nth-child(odd) {
   background: rgba(255,255,255,0.05);
@@ -228,6 +232,7 @@ body {
   padding: .75rem;
   text-align: right;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Modal */
@@ -278,7 +283,7 @@ body {
 
 /* ===== تَعْدِيلات Responsive للهواتف ===== */
 @media (max-width: 768px) {
-  /* اظهر زر الهامبرغر */
+  /* إظهار زر الهامبرغر */
   .menu-toggle {
     display: block;
   }
@@ -293,28 +298,30 @@ body {
     transform: translateX(0);
   }
 
-  /* عند ظهور الشريط الجانبي أضف تراكب خفي */
-  .sidebar.open + .overlay {
-    display: block;
-  }
-
   /* إزالة الهامش من main-content */
   .main-content {
     margin-right: 0;
     padding: 1rem 0.5rem;
   }
 
-  /* جعل الحقول بعرض كامل تقريبًا */
+  /* جعل الحقول عمودية بالكامل */
   .item-form {
     flex-direction: column;
   }
 
+  /*
+    احتفظنا بثلاثة أعمدة في overview-wrap حتى في الهواتف،
+    لكن أضفنا overflow-x auto في الأعلى، وبالتالي يمكن
+    تمرير الجدول أفقيًا إذا كان لا يتّسع.
+  */
   .overview-wrap {
-    grid-template-columns: 1fr; /* كل عمود صفّ كامل */
+    grid-template-columns: repeat(3, 1fr);
+    overflow-x: auto;
   }
+
+  /* الحفاظ على ثلاثة أعمدة في كل صف من العناصر */
   .overview-item {
-    grid-template-columns: repeat(1, 1fr);
-    text-align: right;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   /* تصغير الخطّ في رؤوس الأعمدة قليلاً */
